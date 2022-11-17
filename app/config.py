@@ -1,7 +1,9 @@
 from pydantic import BaseSettings
 
 class Settings(BaseSettings):
-    pass
+    debug: bool = False
+    secret_key: str
+    server_port: int = 5000
 
 
     class Config:
