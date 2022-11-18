@@ -29,6 +29,10 @@ def inventory():
     #     }
     # }
 
+    mock_product = {
+        
+    }
+
 
     custom_dict = {
         'env:Envelope': {

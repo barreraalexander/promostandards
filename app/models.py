@@ -40,16 +40,15 @@ class Product(Base):
     caution_comment = Column(String, nullable=True)
     is_closeout = Column(Boolean, nullable=False)
     line_name = Column(String, nullable=True)
-    primary_img_url = Column(String, nullable=True)
     
-    primary_img_url = Column(String, nullable=True)
-    primary_img_url = Column(String, nullable=True)
-    primary_img_url = Column(String, nullable=True)
-    primary_img_url = Column(String, nullable=True)
-    primary_img_url = Column(String, nullable=True)
-    primary_img_url = Column(String, nullable=True)
-    primary_img_url = Column(String, nullable=True)
-    
+    primary_image_url = Column(String, nullable=True)
+    product_price_group_array = Column(String, nullable=True)
+    compliance_info_available = Column(Boolean, nullable=True)
+    unspscCommodityCode = Column(Integer, nullable=True)
+    imprint_size = Column(String, nullable=True)
+    default_set_up_charge = Column(String, nullable=True)
+    default_run_charge = Column(String, nullable=True)    
+    fob_point_array = Column(String, nullable=False)
 
 
     
