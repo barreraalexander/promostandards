@@ -33,13 +33,51 @@ def inventory():
 
 
     # print (request_xml)
-    xml_dict = xmltodict.parse(request_xml)
-    print (xml_dict)
+    # xml_dict = xmltodict.parse(request_xml)
+    # print (xml_dict)
 
 
+    # custom_dict = {
+    #     'env:Envelope' : {
+    #         '@xmlns:env' : 'http://schemas.xmlsoap.org/soap/envelope/'
 
+    #     }
+    # }
+
+
+    custom_dict = {
+        'env:Envelope': {
+            '@xmlns:env': 'http://schemas.xmlsoap.org/soap/envelope/',
+            'env:Body': {
+                'GetRelevanceResult': {
+                    '@xmlns': 'http://[webreportshostname]:[webreportsport]      /webreports?wsdl',
+                    'relevanceExpr': 'names of bes computers', 'username': 'user', 'password': 'password'
+                    }
+                }
+            }
+        }
+
+    custom_xml = xmltodict.unparse()
+
+    print (custom_xml)
 
     return jsonify({'root' : 'root'})
 
 
                                                                                                                                 
+
+@router.route('/products')
+def products():
+    pass
+
+
+@router.route('/media_content')
+def media_content():
+    pass
+
+
+# product pricing and config
+@router.route('/ppc')
+def ppc():
+    pass
+    
