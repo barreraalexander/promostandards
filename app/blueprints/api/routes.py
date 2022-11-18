@@ -3,21 +3,6 @@ import xmltodict
 
 router = Blueprint('api', __name__, url_prefix='/api')
 
-
-# inventory
-# order status
-# ship notices
-# media
-# product data
-# purchase orders
-# product configuration
-# invoices
-
-@router.route('/')
-def root():
-    return jsonify({'root' : 'root'})
-
-
 # request parameters need to be xml
 # returns need to be xml
 
@@ -68,7 +53,14 @@ def inventory():
 
 @router.route('/products')
 def products():
-    pass
+
+    request_xml =  request.data
+    xml_dict = xmltodict.parse(request)
+
+
+
+    return 'hi'
+
 
 
 @router.route('/media_content')
