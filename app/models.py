@@ -13,7 +13,7 @@ class User(Base):
     password = Column(String, nullable=False)
 
 
-class Product(Base):
+class ProductData(Base):
     __tablename__ = 'products'
 
     id = Column(Integer, primary_key=True, nullable=False)
@@ -44,7 +44,7 @@ class Product(Base):
     primary_image_url = Column(String, nullable=True)
     product_price_group_array = Column(String, nullable=True)
     compliance_info_available = Column(Boolean, nullable=True)
-    unspscCommodityCode = Column(Integer, nullable=True)
+    unspsc_commodity_code = Column(Integer, nullable=True)
     imprint_size = Column(String, nullable=True)
     default_set_up_charge = Column(String, nullable=True)
     default_run_charge = Column(String, nullable=True)    

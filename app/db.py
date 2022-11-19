@@ -7,7 +7,7 @@ SQLITE_DATABASE_URL = "sqlite:///./app/sql_app.db"
 # MYSQL_DATABASE_URL = f"mysql://{settings.database_username}:{settings.database_password}@{settings.database_port}/{settings.database_name}"
 
 
-if (settings.debugging):
+if (settings.debug):
     engine = create_engine(SQLITE_DATABASE_URL, connect_args={'check_same_thread': False})
 else:
     # engine = create_engine(MYSQL_DATABASE_URL)
