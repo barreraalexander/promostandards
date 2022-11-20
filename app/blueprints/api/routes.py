@@ -8,10 +8,6 @@ from app.utils.ppc_helper import PPCOperations
 
 router = Blueprint('api', __name__, url_prefix='/api')
 
-# request parameters need to be xml
-# returns need to be xml
-
-
 @router.route('/product_data')
 def products():
     # get the xml from the request
@@ -48,46 +44,71 @@ def products():
 
 @router.route('/inventory')
 def inventory():
-    # get the xml from the request
     request_xml =  request.data
 
-    #convert the xml to a python dict
     xml_dict = xmltodict.parse(request_xml)
 
-    # get the action type
     for elem in xml_dict:
         action_type = elem
 
+    if action_type=='GetInventoryLevelsRequest':
+        response_xml = InventoryOperations.getInventoryLevels(xml_dict)
+        return response_xml
 
+    if action_type=='GetFilterValuesRequest':
+        response_xml = InventoryOperations.getFilterValues(xml_dict)
+        return response_xml
     return 'error'                                                                                                                                
 
 
 @router.route('/media_content')
 def media_content():
-    # get the xml from the request
     request_xml =  request.data
 
-    #convert the xml to a python dict
     xml_dict = xmltodict.parse(request_xml)
 
-    # get the action type
     for elem in xml_dict:
         action_type = elem
+
+    if action_type=='GetMediaContentRequest':
+        response_xml = MediaContentOperations.getMediaContent(xml_dict)
+        return response_xml
+
+    if action_type=='GetMediaDateModifiedRequest':
+        response_xml = MediaContentOperations.getMediaDateModified(xml_dict)
+        return response_xml
 
     return 'error'                                                                                                                                
 
 
-
-# product pricing and config
 @router.route('/ppc')
 def ppc():
-    # get the xml from the request
     request_xml =  request.data
 
-    #convert the xml to a python dict
     xml_dict = xmltodict.parse(request_xml)
 
-    # get the action type
     for elem in xml_dict:
         action_type = elem
+
+    if action_type=='GetAvailableLocationsRequest':
+        response_xml = PPCOperations.getAvailableLocations(xml_dict)
+        return response_xml
+
+    if action_type=='GetDecorationColorsRequest':
+        response_xml = PPCOperations.getDecorationColors(xml_dict)
+        return response_xml
+
+    if action_type=='GetFobPointsRequest':
+        response_xml = PPCOperations.getFobPoints(xml_dict)
+        return response_xml
+
+    if action_type=='GetAvailableChargesRequest':
+        response_xml = PPCOperations.getAvailableCharges(xml_dict)
+        return response_xml
+
+
+    if action_type=='GetConfigurationAndPricingRequest':
+        response_xml = PPCOperations.getConfigurationAndPricing(xml_dict)
+        return response_xml
+
     return 'error'

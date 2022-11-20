@@ -51,5 +51,14 @@ class ProductData(Base):
     fob_point_array = Column(String, nullable=False)
 
 
-    
+class Inventory(Base):
+    __tablename__ = 'inventory'
+    pass
 
+class MediaContent(Base):
+    __tablename__ = 'media_content'
+    pass
+
+class PPC(Base):
+    __tablename__ = 'ppc'
+    pass
