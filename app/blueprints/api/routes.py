@@ -45,7 +45,8 @@ def products():
 @router.route('/inventory')
 def inventory():
     request_xml =  request.data
-
+    if not request_xml:
+        return 'error', 400
     xml_dict = xmltodict.parse(request_xml)
 
     for elem in xml_dict:
