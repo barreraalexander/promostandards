@@ -16,8 +16,8 @@ class User(Base):
 class ProductData(Base):
     __tablename__ = 'products'
 
-    id = Column(Integer, primary_key=True, nullable=False)
-    name = Column(String, nullable=False)
+    product_id = Column(String, primary_key=True, nullable=False)
+    product_name = Column(String, nullable=False)
     location_decoration_array = Column(String, nullable=False)
     description = Column(String, nullable=False)
 
@@ -50,14 +50,32 @@ class ProductData(Base):
     default_run_charge = Column(String, nullable=True)    
     fob_point_array = Column(String, nullable=False)
 
-
-class Inventory(Base):
-    __tablename__ = 'inventory'
-    pass
+# inventory is just a composition of products
+# class Inventory(Base):
+#     __tablename__ = 'inventory'
+#     pass
 
 class MediaContent(Base):
     __tablename__ = 'media_content'
-    pass
+    product_id = Column(String, primary_key=True, nullable=False)
+    part_id = Column(String, nullable=True)
+    url = Column(String, nullable=False)
+    media_type = Column(String, nullable=True)
+    class_type_array = Column(String, nullable=False)
+    file_size_ = Column(Float, nullable=True)
+    width = Column(Integer, nullable=True)
+    height = Column(Integer, nullable=True)
+    dpi = Column(Integer, nullable=True)
+    color = Column(String, nullable=True)
+    decoration_array = Column(String, nullable=True)
+    location_array = Column(String, nullable=True)
+    description = Column(String, nullable=True)
+    single_part = Column(Boolean, nullable=False)
+    change_time_stamp = Column(Column(TIMESTAMP(timezone=True), nullable=False, server_default=text('now()')))
+
+
+
+
 
 class PPC(Base):
     __tablename__ = 'ppc'

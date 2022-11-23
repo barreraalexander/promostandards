@@ -1,14 +1,14 @@
 import xmltodict
-def test_root(client):
-    assert True == True
+# def test_root(client):
+#     assert True == True
 
 
-def test_getInventoryLevels_no_xml(client):
+def test_getInventoryLevels_error(client):
     res = client.get('/api/inventory')
     print (dir(client))
     assert res.status_code == 400
 
-def test_getInventoryLevels(client):
+def test_getInventoryLevels_successful(client):
     res = client.get('/api/inventory')
     # assert res.status_code == 200
 
