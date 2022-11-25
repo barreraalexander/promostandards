@@ -10,11 +10,15 @@ from app.config import settings
 
 router = Blueprint('api', __name__, url_prefix='/api')
 
-from app.utils.populate_db_helper import populate_database
+from app.utils.populate_db_helper import populate_database_location_decoration, populate_database_productdata
+from app.database import get_session
 
 @router.route('/product_data')
 def products():
-    populate_database()
+    db = get_session()
+
+    # populate_database()
+    populate_database_location_decoration()
     return 'hi'
 
     # if (settings.debug){

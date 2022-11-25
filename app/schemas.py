@@ -37,6 +37,14 @@ class Location(BaseModel):
     location_id: int
     location_name: str
 
+class LocationDecoration(BaseModel):
+    location_name: str
+    max_imprint_colors: Optional[int]
+    decoration_name: str
+    location_decoration_combo_default: bool
+    price_includes: bool
+        
+
 class Part(BaseModel):
     pass
 
@@ -133,7 +141,8 @@ class ProductPrice(BaseModel):
 class ProductDataBase(BaseModel):
     product_id: str
     product_name: str
-    location_decoration_array: List[Decoration]
+    location_decoration_array: List[LocationDecoration]
+    description: str
     price_expires_date: Optional[datetime]
     product_marketing_point_array: List[ProductMarketingPoint]
     product_keyword_array: List[ProductKeyword]
@@ -159,8 +168,6 @@ class ProductDataBase(BaseModel):
     default_run_charge: Optional[str]
     fob_point_array: List[FobPoint]
 
-    # class Config:
-    #     orm_mode = True
 
 
 class ProductData(ProductDataBase):
