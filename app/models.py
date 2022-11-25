@@ -8,7 +8,7 @@ from sqlalchemy.sql.sqltypes import TIMESTAMP
 class User(Base):
     __tablename__ = 'users'
 
-    id = Column(Integer, primary_key=True, nullable=False)
+    id = Column(String, primary_key=True, nullable=False)
     username = Column(String, nullable=False)
     password = Column(String, nullable=False)
 
@@ -32,8 +32,8 @@ class ProductData(Base):
     related_product_array = Column(String, nullable=True)
 
     product_part_array = Column(String, nullable=False)
-    last_change_date = Column(Column(TIMESTAMP(timezone=True), nullable=False, server_default=text('now()')))
-    creation_date = Column(Column(TIMESTAMP(timezone=True), nullable=False, server_default=text('now()')))
+    last_change_date = Column(TIMESTAMP(timezone=True), nullable=False, server_default=text('CURRENT_TIMESTAMP'))
+    creation_date = Column(TIMESTAMP(timezone=True), nullable=False, server_default=text('CURRENT_TIMESTAMP'))
     end_date = Column(TIMESTAMP(timezone=True), nullable=True)
     effective_date = Column(TIMESTAMP(timezone=True), nullable=True)
     is_caution = Column(Boolean, nullable=False)
@@ -57,12 +57,14 @@ class ProductData(Base):
 
 class MediaContent(Base):
     __tablename__ = 'media_content'
+
+
     product_id = Column(String, primary_key=True, nullable=False)
     part_id = Column(String, nullable=True)
     url = Column(String, nullable=False)
     media_type = Column(String, nullable=True)
     class_type_array = Column(String, nullable=False)
-    file_size_ = Column(Float, nullable=True)
+    file_size = Column(Float, nullable=True)
     width = Column(Integer, nullable=True)
     height = Column(Integer, nullable=True)
     dpi = Column(Integer, nullable=True)
@@ -71,12 +73,13 @@ class MediaContent(Base):
     location_array = Column(String, nullable=True)
     description = Column(String, nullable=True)
     single_part = Column(Boolean, nullable=False)
-    change_time_stamp = Column(Column(TIMESTAMP(timezone=True), nullable=False, server_default=text('now()')))
+    change_time_stamp = Column(TIMESTAMP(timezone=True), nullable=True)
+    
 
 
 
 
 
-class PPC(Base):
-    __tablename__ = 'ppc'
-    pass
+# class PPC(Base):
+#     __tablename__ = 'ppc'
+#     pass

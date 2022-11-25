@@ -6,10 +6,22 @@ from app.utils.inventory_helper import InventoryOperations
 from app.utils.media_content_helper import MediaContentOperations
 from app.utils.ppc_helper import PPCOperations
 
+from app.config import settings
+
 router = Blueprint('api', __name__, url_prefix='/api')
+
+from app.utils.populate_db_helper import populate_database
 
 @router.route('/product_data')
 def products():
+    populate_database()
+    return 'hi'
+
+    # if (settings.debug){
+    #     # if request.method
+
+    # }
+
     # get the xml from the request
     request_xml =  request.data
 

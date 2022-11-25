@@ -10,13 +10,24 @@ class Color(BaseModel):
 
 
 class Specification(BaseModel):
-    pass
+    specification_type: str
+    specification_uom: str
+    measurement_value: str
+
 
 class ApparelSize(BaseModel):
-    pass
+    apparel_style: str
+    label_size: str
+    custom_size: Optional[str]
 
-class Dimension(BaseModel):
-    pass
+
+class Dimension(BaseModel):     
+    dimension_uom: str
+    depth: Optional[float]
+    height: Optional[float]
+    width: Optional[float]
+    weight_uom: str
+    weight: float
 
 class Decoration(BaseModel):
     decoration_id: int
@@ -42,10 +53,28 @@ class RelatedProduct(BaseModel):
     part_id: Optional[str]
 
 class ProductPackaging(BaseModel):
-    pass
+    default: bool
+    package_type: str
+    description: Optional[str]
+    quantity: float
+    dimension_uom: float
+    depth: Optional[float]
+    height: Optional[float]
+    width: Optional[float]
+    weight_uom: str
+    weight: Optional[float]
+
 
 class ShippingPackaging(BaseModel):
-    pass
+    package_type: str
+    description: Optional[str]
+    quantity: float
+    dimension_uom: str
+    depth: Optional[float]
+    height: Optional[float]
+    width: Optional[float]
+    weight_uom: str
+    weight: Optional[float]
 
 class ProductPart(BaseModel):
     part_id: str
@@ -93,13 +122,11 @@ class ProductPriceGroup(BaseModel):
     product_price_array: List[str]
 
 
-
-
-
-
-# class ProductMarketingPoint(BaseModel):
-#     point_type: Optional[str]
-#     poin
+class ProductPrice(BaseModel):
+    quantity_max: int
+    quantity_min: int
+    price: float 
+    discount_code: Optional[str]
 
 
 
@@ -107,29 +134,119 @@ class ProductDataBase(BaseModel):
     product_id: str
     product_name: str
     location_decoration_array: List[Decoration]
-    price_expires_date: datetime
-    product_marketing_point_array: List[MarketingPoint]
-    product_keyword_array: List
-    product_brand: str
+    price_expires_date: Optional[datetime]
+    product_marketing_point_array: List[ProductMarketingPoint]
+    product_keyword_array: List[ProductKeyword]
+    product_brand: Optional[str]
+    export: bool
+    product_category_array: List[ProductCategory]
+    related_product_array: List[ProductCategory]
+    product_part_array: List[ProductPart]
+    last_change_date: datetime
+    creation_date: datetime
+    end_date: Optional[datetime]
+    effective_date: Optional[datetime]
+    is_caution: bool
+    caution_comment: Optional[str]
+    is_closeout: bool
+    line_name: str
+    primary_image_url: str
+    product_price_group_array: List[ProductPriceGroup]
+    compliance_info_available: Optional[bool]
+    unspsc_commodity_code: Optional[int]
+    imprint_size: Optional[str]
+    default_set_up_charge: Optional[str]
+    default_run_charge: Optional[str]
+    fob_point_array: List[FobPoint]
 
-    export: 
+    # class Config:
+    #     orm_mode = True
 
-    product_category_a
 
 class ProductData(ProductDataBase):
+    class Config:
+        orm_mode = True
+
+class MediaContent(BaseModel):
+    ws_version: str
+    id: str
+    password: Optional[str]
+    culture_name: Optional[str]
+    media_type: str
+    product_id: str
+    part_id: str
+    class_type: str
+
+class MediaContent_getMediaContentRequest(MediaContent):
     pass
 
-class ProductDataPart(ProductDataBase):
+class MediaContent_getMediaContentDetailsResponse(MediaContent):
+    media_content_array: List[MediaContent] 
+
+
+
+class MediaContent_getMediaDateModifiedRequest(MediaContent):
     pass
+
+class MediaContent_getMediaDateModifiedRequest(MediaContent):
+    change_time_stamp: Optional[datetime]
+
+
+class MediaContent_getMediaDateModifiedResponse(MediaContent):
+    media_date_modified_array: List[MediaContent]
+
+
+# class 
+
+    # product_category_a
+
+# class ProductData(ProductDataBase):
+#     pass
+
+# class ProductDataPart(ProductDataBase):
+#     pass
+
 
 class Inventory:
     pass
 
-class MediaContent:
+
+class PPC(BaseModel):
+    ws_version: str
+    id: str
+    password: Optional[str]
+    product_id: str
+    localization_country: str
+    localization_language: str
+
+class PPC_getAvailableLocationsRequest(PPC):
+    available_location_array: List[Location]
+
+class PPC_getDecorationColorRequest():
+    decoration_colors: List[Color]
+
+
+class PPC_getDecorationColorsResponse():
     pass
 
-class PPC:
+
+
+class PPC_getFobPointsRequest(PPC):
     pass
+
+
+class PPC_getFobPointsResponse(PPC):
+    fob_point_array: List[FobPoint]
+
+
+class PPC_getAvailableChargesRequest(PPC):
+    pass
+
+
+class PPC_getAvailableChargesResponse(PPC):
+    pass
+    # fob_point_array: List[A]
+
 
 
 

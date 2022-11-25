@@ -1,8 +1,13 @@
 from flask import Flask, jsonify
 from app.config import settings
+from app import models
+from app.database import engine
+
+
 
 def create_app(config_class=settings):
-# def create_app():
+    models.Base.metadata.create_all(bind=engine)
+
     app = Flask(__name__)
     app.config.from_object(config_class)
 

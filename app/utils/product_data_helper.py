@@ -1,4 +1,5 @@
 import xmltodict
+# from app import schemas
 
 class ProductDataOperations:
     @staticmethod
@@ -12,6 +13,8 @@ class ProductDataOperations:
         # convert response dict to xml
         response_xml = xmltodict.unparse(response_dict)
 
+
+
         return response_xml
 
     
@@ -21,6 +24,7 @@ class ProductDataOperations:
         response_dict = {'ProductDateModified': {'@xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance', '@xmlns': 'http://www.promostandards.org/WSDL/ProductDataService/2.0.0/', 'productId': {'@xmlns': 'http://www.promostandards.org/WSDL/ProductDataService/2.0.0/SharedObjects/', '#text': 'Token1'}, 'partId': {'@xmlns': 'http://www.promostandards.org/WSDL/ProductDataService/2.0.0/SharedObjects/', '#text': 'Token1'}}}
 
         response_xml = xmltodict.unparse(response_dict)
+
 
         return response_xml
 
