@@ -18,8 +18,8 @@ def products():
     db = get_session()
 
     # populate_database()
-    populate_database_location_decoration()
-    return 'hi'
+    # populate_database_location_decoration()
+    # return 'hi'
 
     # if (settings.debug){
     #     # if request.method

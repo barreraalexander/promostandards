@@ -9,36 +9,35 @@ from app import models
 
 TRUE_OR_FALSE = [False, True]
 
-
-
-
-def populate_database_location_decoration():
-    new_location_decoration = schemas.LocationDecoration(**{
+def populate_database_location_decoration(count=25):
+    new_location_decorations = [schemas.LocationDecoration(**{
         'location_name' : token_hex(6),
         'max_imprint_colors': randrange(0,6),
         'decoration_name': token_hex(6),
         'location_decoration_combo_default': choice(TRUE_OR_FALSE),
         'price_includes' : choice(TRUE_OR_FALSE)
-    })
+    }) for i in range(count)]
 
-    new_model = models.LocationDecoration(**new_location_decoration.dict())
+    new_models = [models.LocationDecoration(**new_location_decoration.dict())
+        for new_location_decoration in new_location_decorations]
 
     db_session = get_session()
+    for new_model in new_models:
+        db_session.add(new_model)
 
-
-
-    db_session.add(new_model)
     db_session.commit()
 
-    location_decorations = db_session.query(models.LocationDecoration).all()
-    print (location_decorations)
 
 
-def populate_database_productdata():
-    new_product = schemas.ProductData(**{
+def populate_database_productdata(count=25):
+    db_session = get_session()
+    
+    location_decorations = db_session.query(models.ProductData).all()
+
+    new_products = [schemas.ProductData(**{
         'product_id' : token_hex(8),
         'product_name': token_hex(4),
-        'location_decoration_array' : [],
+        'location_decoration_array' : [location_decoration.location_name for location_decoration in location_decorations],
         'description' : token_hex(6),
         'product_marketing_point_array' : [],
         'product_keyword_array' : [],
@@ -54,35 +53,28 @@ def populate_database_productdata():
         'primary_image_url' : token_hex(6),
         'product_price_group_array' : [],
         'fob_point_array' : []        
-    })
+    }) for i in range(count)]
+
+    new_models = [models.ProductData(**new_location_decoration.dict())
+        for new_location_decoration in new_products]
 
     db_session = get_session()
+    for new_model in new_models:
+        new_model.location_decoration_array =  ",".join(new_model.location_decoration_array)
+        new_model.product_marketing_point_array =  ",".join(new_model.product_marketing_point_array)
+        new_model.product_keyword_array =  ",".join(new_model.product_keyword_array)
+        new_model.product_category_array =  ",".join(new_model.product_category_array)
+        new_model.related_product_array =  ",".join(new_model.related_product_array)
+        new_model.product_part_array =  ",".join(new_model.product_part_array)
+        new_model.product_price_group_array =  ",".join(new_model.product_price_group_array)
+        new_model.fob_point_array =  ",".join(new_model.product_price_group_array)
+        
+        db_session.add(new_model)
 
-    new_model = models.ProductData(**new_product.dict())
-
-    # new
-
-
-    new_model.location_decoration_array =  ",".join(new_product.location_decoration_array)
-    new_model.product_marketing_point_array =  ",".join(new_model.product_marketing_point_array)
-    new_model.product_keyword_array =  ",".join(new_product.product_keyword_array)
-    new_model.product_category_array =  ",".join(new_product.product_category_array)
-    new_model.related_product_array =  ",".join(new_product.related_product_array)
-    new_model.product_part_array =  ",".join(new_product.product_part_array)
-    new_model.product_price_group_array =  ",".join(new_product.product_price_group_array)
-    new_model.fob_point_array =  ",".join(new_product.product_price_group_array)
-
-    # print (new_model.location_decoration_array.split(','))
-
-    db_session.add(new_model)
-    # db_session.commit()
-# /
-# 
-
-    # db_session.refresh(new)
     db_session.commit()
 
-    products = db_session.query(models.ProductData).all()
-    print (products)
-    # pass
+    # products = db_session.query(models.ProductData).all()
+    # print (products)
 
+
+# def populate_database_productdata

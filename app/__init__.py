@@ -3,6 +3,7 @@ from app.config import settings
 from app import models
 from app.database import engine
 
+from app.utils.populate_db_helper import populate_database_location_decoration, populate_database_productdata
 
 
 def create_app(config_class=settings):
@@ -14,5 +15,16 @@ def create_app(config_class=settings):
     from app.blueprints.api.routes import router as api_router
     app.register_blueprint(api_router)
 
+
+    if (settings.debug):
+        # while in debug, the database will reset everytime it's loaded up
+        models.Base.metadata.drop_all(bind=engine)
+        models.Base.metadata.create_all(bind=engine)
+
+        populate_database_location_decoration()
+        populate_database_productdata()
+
+
+        pass
 
     return app
