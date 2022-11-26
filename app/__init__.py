@@ -3,7 +3,7 @@ from app.config import settings
 from app import models
 from app.database import engine
 
-from app.utils.populate_db_helper import populate_database_location_decoration, populate_database_productdata
+from app.utils.populate_db_helper import populate_database_location_decoration, populate_database_productdata, populate_database_media_content
 
 
 def create_app(config_class=settings):
@@ -23,6 +23,7 @@ def create_app(config_class=settings):
 
         populate_database_location_decoration()
         populate_database_productdata()
+        populate_database_media_content()
 
 
         pass

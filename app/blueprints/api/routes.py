@@ -17,16 +17,6 @@ from app.database import get_session
 def products():
     db = get_session()
 
-    # populate_database()
-    # populate_database_location_decoration()
-    # return 'hi'
-
-    # if (settings.debug){
-    #     # if request.method
-
-    # }
-
-    # get the xml from the request
     request_xml =  request.data
 
     #convert the xml to a python dict

@@ -8,6 +8,9 @@ class Color(BaseModel):
     approximate_pms: Optional[str]
     standard_color_name: Optional[str]
 
+class ClassType(BaseModel):
+    class_type: int
+    class_name: str
 
 class Specification(BaseModel):
     specification_type: str
@@ -45,12 +48,10 @@ class LocationDecoration(BaseModel):
     price_includes: bool
         
 
-class Part(BaseModel):
-    pass
-
 class ProductMarketingPoint(BaseModel):
     point_type: Optional[str]
     point_copy: str
+
 
 class ProductKeyword(BaseModel):
     keyword: str
@@ -65,7 +66,7 @@ class ProductPackaging(BaseModel):
     package_type: str
     description: Optional[str]
     quantity: float
-    dimension_uom: float
+    dimension_uom: str
     depth: Optional[float]
     height: Optional[float]
     width: Optional[float]
@@ -123,20 +124,17 @@ class ProductCategory(BaseModel):
     category: str
     sub_category: str
 
+class ProductPrice(BaseModel):
+    quantity_max: int
+    quantity_min: int
+    price: float
+    discount_code: Optional[str]
+
 class ProductPriceGroup(BaseModel):
     group_name: str
     currency: str
     description: Optional[str]
-    product_price_array: List[str]
-
-
-class ProductPrice(BaseModel):
-    quantity_max: int
-    quantity_min: int
-    price: float 
-    discount_code: Optional[str]
-
-
+    product_price_array: List[ProductPrice]
 
 class ProductDataBase(BaseModel):
     product_id: str
@@ -149,7 +147,7 @@ class ProductDataBase(BaseModel):
     product_brand: Optional[str]
     export: bool
     product_category_array: List[ProductCategory]
-    related_product_array: List[ProductCategory]
+    related_product_array: List[RelatedProduct]
     product_part_array: List[ProductPart]
     last_change_date: datetime
     creation_date: datetime
@@ -168,21 +166,42 @@ class ProductDataBase(BaseModel):
     default_run_charge: Optional[str]
     fob_point_array: List[FobPoint]
 
-
-
 class ProductData(ProductDataBase):
     class Config:
         orm_mode = True
 
-class MediaContent(BaseModel):
-    ws_version: str
-    id: str
-    password: Optional[str]
-    culture_name: Optional[str]
-    media_type: str
+class MediaContentBase(BaseModel):
     product_id: str
-    part_id: str
-    class_type: str
+    part_id: Optional[str]
+    url: str
+    media_type: str
+    class_type_array: List[ClassType]
+    file_size: Optional[float]
+    width: Optional[int]
+    height: Optional[int]
+    dpi: Optional[int]
+    color: Optional[str]
+    decoration_array: List[Decoration]
+    location_array: List[Location]
+    description: Optional[str]
+    single_part: bool
+    change_time_stamp: Optional[datetime]
+
+
+
+    # ws_version: str
+    # id: str
+    # password: Optional[str]
+    # culture_name: Optional[str]
+    # media_type: str
+    # class_type: str
+
+class MediaContent(MediaContentBase):
+    class Config:
+        orm_mode = True
+
+# class MediaContent
+
 
 class MediaContent_getMediaContentRequest(MediaContent):
     pass
