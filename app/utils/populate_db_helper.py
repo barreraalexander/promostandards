@@ -14,7 +14,7 @@ def populate_database_location_decoration(count=25):
     new_location_decorations = [schemas.LocationDecoration(**{
         'location_name' : token_hex(6),
         'max_imprint_colors': randrange(0,6),
-        'decoration_name': token_hex(6),
+        'decoration_name': f"Token{i}",
         'location_decoration_combo_default': choice(TRUE_OR_FALSE),
         'price_includes' : choice(TRUE_OR_FALSE)
     }) for i in range(count)]
@@ -209,7 +209,7 @@ def populate_database_productdata(count=25):
     ]
 
     new_products = [schemas.ProductData(**{
-        'product_id': token_hex(6),
+        'product_id': f"Token{i}",
         'product_name': token_hex(6),
         'location_decoration_array': location_decorations,
         'description': token_hex(6),
@@ -265,7 +265,7 @@ def populate_database_productdata(count=25):
 
     
 
-def populate_database_media_content(count=1):
+def populate_database_media_content(count=25):
 
     class_types = [
         schemas.ClassType(**{
@@ -294,7 +294,7 @@ def populate_database_media_content(count=1):
 
     new_media_contents = [
         schemas.MediaContent(**{
-            'product_id': token_hex(6),
+            'product_id': f'Token{i}',
             'part_id': token_hex(6),
             'url': token_urlsafe(6),
             'media_type': token_hex(6),

@@ -1,10 +1,13 @@
 import xmltodict
-from flask import Blueprint, request
+from flask import Blueprint, request, Response
 
 from app.utils.product_data_helper import ProductDataOperations
 from app.utils.inventory_helper import InventoryOperations
 from app.utils.media_content_helper import MediaContentOperations
 from app.utils.ppc_helper import PPCOperations
+
+# from app.utils.xml_response_templates.MediaContent_getMediaContentResponse import xml_response as getMediaContentResponse
+# from app.utils.
 
 from app.config import settings
 
@@ -15,7 +18,6 @@ from app.database import get_session
 
 @router.route('/product_data')
 def products():
-    db = get_session()
 
     request_xml =  request.data
 
@@ -29,6 +31,7 @@ def products():
     # run the particular action 
     if action_type=='GetProductRequest':
         response_xml = ProductDataOperations.getProductRequest(xml_dict)
+        response = Response(response_xml, content_type='text/xml')
         return response_xml    
 
     if action_type=='GetProductDateModifiedRequest':
@@ -70,6 +73,7 @@ def inventory():
 
 @router.route('/media_content')
 def media_content():
+
     request_xml =  request.data
 
     xml_dict = xmltodict.parse(request_xml)
@@ -79,7 +83,9 @@ def media_content():
 
     if action_type=='GetMediaContentRequest':
         response_xml = MediaContentOperations.getMediaContent(xml_dict)
-        return response_xml
+        if response_xml:
+            response = Response(response_xml, mimetype='text/xml')
+            return response
 
     if action_type=='GetMediaDateModifiedRequest':
         response_xml = MediaContentOperations.getMediaDateModified(xml_dict)

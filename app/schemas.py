@@ -170,6 +170,7 @@ class ProductData(ProductDataBase):
     class Config:
         orm_mode = True
 
+
 class MediaContentBase(BaseModel):
     product_id: str
     part_id: Optional[str]
@@ -188,28 +189,27 @@ class MediaContentBase(BaseModel):
     change_time_stamp: Optional[datetime]
 
 
-
-    # ws_version: str
-    # id: str
-    # password: Optional[str]
-    # culture_name: Optional[str]
-    # media_type: str
-    # class_type: str
-
 class MediaContent(MediaContentBase):
     class Config:
         orm_mode = True
 
 # class MediaContent
 
+class MediaContent_getMediaContentRequest(BaseModel):
+    ws_version: str
+    id: str
+    password: Optional[str]
+    culture_name: Optional[str]
+    media_type: str
+    product_id: str
+    part_id: Optional[str]
+    class_type: int
 
-class MediaContent_getMediaContentRequest(MediaContent):
+# class MediaContent_getMediaContentDetailsResponse(MediaContent):
+#     media_content_array: List[MediaContent] 
+
+def get_MediaContentResponse(product_id):
     pass
-
-class MediaContent_getMediaContentDetailsResponse(MediaContent):
-    media_content_array: List[MediaContent] 
-
-
 
 class MediaContent_getMediaDateModifiedRequest(MediaContent):
     pass
