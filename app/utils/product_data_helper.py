@@ -13,8 +13,6 @@ class ProductDataOperations:
         # convert response dict to xml
         response_xml = xmltodict.unparse(response_dict)
 
-
-
         return response_xml
 
     
