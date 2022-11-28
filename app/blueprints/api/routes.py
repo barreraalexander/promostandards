@@ -89,8 +89,9 @@ def media_content():
 
     if action_type=='GetMediaDateModifiedRequest':
         response_xml = MediaContentOperations.getMediaDateModified(xml_dict)
-        return response_xml
-
+        if response_xml:
+            response = Response(response_xml, mimetype='text/xml')
+            return response
     return 'error'                                                                                                                                
 
 
