@@ -188,12 +188,9 @@ class MediaContentBase(BaseModel):
     single_part: bool
     change_time_stamp: Optional[datetime]
 
-
 class MediaContent(MediaContentBase):
     class Config:
         orm_mode = True
-
-# class MediaContent
 
 class MediaContent_getMediaContentRequest(BaseModel):
     ws_version: str
@@ -205,17 +202,18 @@ class MediaContent_getMediaContentRequest(BaseModel):
     part_id: Optional[str]
     class_type: int
 
-# class MediaContent_getMediaContentDetailsResponse(MediaContent):
-#     media_content_array: List[MediaContent] 
 
-def get_MediaContentResponse(product_id):
-    pass
-
-class MediaContent_getMediaDateModifiedRequest(MediaContent):
-    pass
-
-class MediaContent_getMediaDateModifiedRequest(MediaContent):
+class MediaContent_getMediaDateModifiedRequest(BaseModel):
+    ws_version: str
+    id: str
+    password: Optional[str]
+    culture_name: Optional[str]
     change_time_stamp: Optional[datetime]
+
+
+class MediaContent_getMediaDateModifiedResponse(BaseModel):
+    product_id: str
+    part_id: Optional[str]
 
 
 class MediaContent_getMediaDateModifiedResponse(MediaContent):
