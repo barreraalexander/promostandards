@@ -235,7 +235,8 @@ class Inventory:
     pass
 
 
-class PPC(BaseModel):
+
+class PPCBase(BaseModel):
     ws_version: str
     id: str
     password: Optional[str]
@@ -243,7 +244,15 @@ class PPC(BaseModel):
     localization_country: str
     localization_language: str
 
+
+class PPC(PPCBase):
+    class Config:
+        orm_mode = True
+
 class PPC_getAvailableLocationsRequest(PPC):
+    pass
+                                
+class PPC_getAvailableLocationsResponse(PPC):
     available_location_array: List[Location]
 
 class PPC_getDecorationColorRequest():

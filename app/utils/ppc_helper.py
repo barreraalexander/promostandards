@@ -1,10 +1,38 @@
+from app import schemas, models
+from app.database import get_session
+
+from app.utils.xml_response_templates.PPC_getAvailableLocationsResponse import xml_response as getAvailableLocationsResponse
+
 import xmltodict
 
 class PPCOperations:
     @staticmethod
     def getAvailableLocations(xml_dict):
+        request_dict = (xml_dict['GetAvailableLocationsRequest'])
 
-        response_dict = {'AvailableLocation': {'@xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance', '@xmlns': 'http://www.promostandards.org/WSDL/PricingAndConfiguration/1.0.0/', 'locationId': {'@xmlns': 'http://www.promostandards.org/WSDL/PricingAndConfiguration/1.0.0/SharedObjects/', '#text': '1'}, 'locationName': {'@xmlns': 'http://www.promostandards.org/WSDL/PricingAndConfiguration/1.0.0/SharedObjects/', '#text': 'locationName1'}}}
+        # response_dict = {'AvailableLocation': {'@xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance', '@xmlns': 'http://www.promostandards.org/WSDL/PricingAndConfiguration/1.0.0/', 'locationId': {'@xmlns': 'http://www.promostandards.org/WSDL/PricingAndConfiguration/1.0.0/SharedObjects/', '#text': '1'}, 'locationName': {'@xmlns': 'http://www.promostandards.org/WSDL/PricingAndConfiguration/1.0.0/SharedObjects/', '#text': 'locationName1'}}}
+
+        request_schema = schemas.PPC_getAvailableLocationsRequest(**{
+            'ws_version': request_dict['wsVersion']['#text'],
+            'id': request_dict['id']['#text'],
+            'password': request_dict['password']['#text'],
+            'product_id': request_dict['productId']['#text'],
+            # 'part_id': request_dict.get('partId').get('#text'),
+            'localization_country': request_dict.get('localizationCountry').get('#text'),
+            'localization_language': request_dict.get('localizationLanguage').get('#text')
+        })
+
+        db_session = get_session()
+        media_content = db_session.query(models.MediaContent).filter(models.MediaContent.product_id==request_schema.product_id).first()
+        # media_content = db_session.query(models.MediaContent).filter(models.MediaContent.product_id==request_schema.product_id).first()
+        if (not media_content):
+            return False
+
+
+        xml = getAvailableLocationsResponse(media_content)
+
+        return xml
+
 
         response_xml = xmltodict.unparse(response_dict)
 

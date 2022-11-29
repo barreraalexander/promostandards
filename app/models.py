@@ -78,10 +78,13 @@ class MediaContent(Base):
 # create a table that will store random location decorations
 # when a new product_data model is created, the ids should be looked up, and get the required location decorations, convert the list
 
+
+
 # class Location(Base):
 #     __tablename__ = 'location'
 
 #     location_id = Column()
+
 
 
 class LocationDecoration(Base):

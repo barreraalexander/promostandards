@@ -47,13 +47,18 @@ class MediaContentOperations:
         })
 
         db_session = get_session()
-        media_content = db_session.query(models.MediaContent).first()
+        # media_content = db_session.query(models.MediaContent).first()
+        media_content = db_session.query(models.MediaContent).all()
         # media_content = db_session.query(models.MediaContent).filter(models.MediaContent.product_id==request_schema.product_id).first()
         if (not media_content):
             return False
             
-        xml = getDateModifiedResponse(media_content)
-        
+        xml = b''
+        for content in media_content:
+            data = getDateModifiedResponse(content)            
+            xml += data
+            
+
         return xml
 
 
