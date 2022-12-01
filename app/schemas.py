@@ -333,9 +333,9 @@ class PPC_getAvailableChargesResponse(PPC):
     # fob_point_array: List[A]
 
 
-
-
-
-
-
-# get the sub-objects that are inside of arrays
+class Inventory_getInventoryLevelsRequest(BaseModel):
+    ws_version: str
+    id: str
+    password: Optional[str]
+    product_id: str
+    filter: dict

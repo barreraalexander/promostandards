@@ -28,23 +28,23 @@ def products():
     for elem in xml_dict:
         action_type = elem
 
+    response_xml = False
     # run the particular action 
     if action_type=='GetProductRequest':
         response_xml = ProductDataOperations.getProductRequest(xml_dict)
-        response = Response(response_xml, content_type='text/xml')
-        return response_xml    
 
     if action_type=='GetProductDateModifiedRequest':
         response_xml = ProductDataOperations.getProductDateModifiedRequest(xml_dict)
-        return response_xml    
 
     if action_type=='GetProductCloseOutRequest':
         response_xml = ProductDataOperations.getProductCloseOutRequest(xml_dict)
-        return response_xml
 
     if action_type=='GetProductSellableRequest':
         response_xml = ProductDataOperations.getProductSellableRequest(xml_dict)
-        return response_xml
+
+    if (response_xml):
+        response = Response(response_xml, content_type='text/xml')
+        return response
 
     # check docs for what to do about total errors 
     return 'error'
@@ -54,20 +54,24 @@ def products():
 @router.route('/inventory')
 def inventory():
     request_xml =  request.data
-    if not request_xml:
-        return 'error', 400
+
     xml_dict = xmltodict.parse(request_xml)
 
     for elem in xml_dict:
         action_type = elem
 
+    print (action_type)
     if action_type=='GetInventoryLevelsRequest':
         response_xml = InventoryOperations.getInventoryLevels(xml_dict)
-        return response_xml
+        print (response_xml)
 
     if action_type=='GetFilterValuesRequest':
         response_xml = InventoryOperations.getFilterValues(xml_dict)
-        return response_xml
+
+    if (response_xml):
+        response = Response(response_xml, content_type='text/xml')
+        return response
+
     return 'error'                                                                                                                                
 
 
@@ -92,6 +96,11 @@ def media_content():
         if response_xml:
             response = Response(response_xml, mimetype='text/xml')
             return response
+
+    if (response_xml):
+        response = Response(response_xml, content_type='text/xml')
+        return response
+
     return 'error'                                                                                                                                
 
 
@@ -104,25 +113,24 @@ def ppc():
     for elem in xml_dict:
         action_type = elem
 
+    response_xml = False
     if action_type=='GetAvailableLocationsRequest':
         response_xml = PPCOperations.getAvailableLocations(xml_dict)
-        return response_xml
 
     if action_type=='GetDecorationColorsRequest':
         response_xml = PPCOperations.getDecorationColors(xml_dict)
-        return response_xml
 
     if action_type=='GetFobPointsRequest':
         response_xml = PPCOperations.getFobPoints(xml_dict)
-        return response_xml
 
     if action_type=='GetAvailableChargesRequest':
         response_xml = PPCOperations.getAvailableCharges(xml_dict)
-        return response_xml
-
 
     if action_type=='GetConfigurationAndPricingRequest':
         response_xml = PPCOperations.getConfigurationAndPricing(xml_dict)
-        return response_xml
+
+    if (response_xml):
+        response = Response(response_xml, content_type='text/xml')
+        return response
 
     return 'error'
