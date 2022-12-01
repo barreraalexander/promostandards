@@ -132,7 +132,7 @@ def populate_database_productdata(count=25):
     product_parts = [
         schemas.ProductPart(**{
             'part_id' : token_hex(6),
-            'description' : token_hex(6),
+            'description' : [token_hex(6) for i in range (randrange(1,10))],
             'country_of_origin' : token_hex(6),
             'color_array' : colors,
             'primary_material' : token_hex(6),
@@ -212,7 +212,7 @@ def populate_database_productdata(count=25):
         'product_id': f"Token{i}",
         'product_name': token_hex(6),
         'location_decoration_array': location_decorations,
-        'description': token_hex(6),
+        'description': [token_hex(6) for i in range (randrange(1,10))],
         'price_expires_date': datetime.utcnow(),
         'product_marketing_point_array': product_marketing_points,
         'product_keyword_array': product_keywords,
@@ -244,6 +244,7 @@ def populate_database_productdata(count=25):
 
     db_session = get_session()
     for new_model in new_models:
+        new_model.description =  json.dumps(new_model.description, default=str)
         new_model.location_decoration_array =  json.dumps(new_model.location_decoration_array, default=str)
         new_model.product_marketing_point_array =  json.dumps(new_model.product_marketing_point_array, default=str)
         new_model.product_keyword_array =  json.dumps(new_model.product_keyword_array, default=str)
@@ -251,7 +252,7 @@ def populate_database_productdata(count=25):
         new_model.related_product_array =  json.dumps(new_model.related_product_array, default=str)
         new_model.product_part_array =  json.dumps(new_model.product_part_array, default=str)
         new_model.product_price_group_array =  json.dumps(new_model.product_price_group_array, default=str)
-        new_model.fob_point_array =  json.dumps(new_model.product_price_group_array, default=str)
+        new_model.fob_point_array =  json.dumps(new_model.fob_point_array, default=str)
         
         db_session.add(new_model)
 

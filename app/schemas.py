@@ -87,7 +87,8 @@ class ShippingPackaging(BaseModel):
 
 class ProductPart(BaseModel):
     part_id: str
-    description: Optional[str]
+    # description: Optional[str]
+    description: List[str]
     country_of_origin: Optional[str]
     color_array: List[Color]
     primary_material: Optional[str]
@@ -136,11 +137,17 @@ class ProductPriceGroup(BaseModel):
     description: Optional[str]
     product_price_array: List[ProductPrice]
 
+
+class ServiceMessage(BaseModel):
+    code: int
+    description: str
+    severity: str
+
 class ProductDataBase(BaseModel):
     product_id: str
     product_name: str
     location_decoration_array: List[LocationDecoration]
-    description: str
+    description: List[str]
     price_expires_date: Optional[datetime]
     product_marketing_point_array: List[ProductMarketingPoint]
     product_keyword_array: List[ProductKeyword]
@@ -169,6 +176,51 @@ class ProductDataBase(BaseModel):
 class ProductData(ProductDataBase):
     class Config:
         orm_mode = True
+
+
+class ProductSellable(BaseModel):
+    product_id: str
+    part_id: Optional[str]
+    culture_point: Optional[str]
+    
+
+class ProductData_getProductRequest(BaseModel):
+    ws_version: str
+    id: str
+    password: Optional[str]
+    localization_country: str
+    localization_language: str
+    product_id: str
+    part_id: Optional[str]
+    color_name: str
+    apparel_size_array: List[ApparelSize]
+
+class ProductData_getProductDateModifiedRequest(BaseModel):
+    ws_version: str
+    id: str
+    password: Optional[str]
+    culture_name: Optional[str]
+    change_time_stamp: Optional[datetime]
+
+# this function will provide a list of Product Ids and optional Part Ids for all items which currently have an isCloseOut value of TRUE.
+class ProductData_getProductCloseOutRequest(BaseModel):
+    ws_version: str
+    id: str
+    password: Optional[str]
+
+# This function will provide a list of Product Ids and optional Part Ids along with their status of available to sell (Sellable TRUE or FALSE).
+class ProductData_getProductSellableRequest(BaseModel):
+    ws_version: str
+    id: str
+    password: Optional[str]
+    localization_country: str
+    localization_language: str
+    product_id: str
+    part_id: Optional[str]
+    line_name: Optional[str]
+    is_sellable: bool
+    # color_name: str
+    # apparel_size_array: List[ApparelSize]
 
 
 class MediaContentBase(BaseModel):
@@ -251,22 +303,22 @@ class PPC(PPCBase):
 
 class PPC_getAvailableLocationsRequest(PPC):
     pass
-                                
+
 class PPC_getAvailableLocationsResponse(PPC):
     available_location_array: List[Location]
 
-class PPC_getDecorationColorRequest():
-    decoration_colors: List[Color]
 
+
+class PPC_getDecorationColorRequest(PPC):
+    decoration_id: int
 
 class PPC_getDecorationColorsResponse():
-    pass
+    decoration_colors: List[Color]
 
 
 
 class PPC_getFobPointsRequest(PPC):
     pass
-
 
 class PPC_getFobPointsResponse(PPC):
     fob_point_array: List[FobPoint]

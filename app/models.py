@@ -55,7 +55,6 @@ class ProductData(Base):
 class MediaContent(Base):
     __tablename__ = 'media_content'
 
-
     product_id = Column(String, primary_key=True, nullable=False)
     part_id = Column(String, nullable=True)
     url = Column(String, nullable=False)

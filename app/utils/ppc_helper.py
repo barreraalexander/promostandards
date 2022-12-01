@@ -10,8 +10,6 @@ class PPCOperations:
     def getAvailableLocations(xml_dict):
         request_dict = (xml_dict['GetAvailableLocationsRequest'])
 
-        # response_dict = {'AvailableLocation': {'@xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance', '@xmlns': 'http://www.promostandards.org/WSDL/PricingAndConfiguration/1.0.0/', 'locationId': {'@xmlns': 'http://www.promostandards.org/WSDL/PricingAndConfiguration/1.0.0/SharedObjects/', '#text': '1'}, 'locationName': {'@xmlns': 'http://www.promostandards.org/WSDL/PricingAndConfiguration/1.0.0/SharedObjects/', '#text': 'locationName1'}}}
-
         request_schema = schemas.PPC_getAvailableLocationsRequest(**{
             'ws_version': request_dict['wsVersion']['#text'],
             'id': request_dict['id']['#text'],
@@ -34,18 +32,38 @@ class PPCOperations:
         return xml
 
 
-        response_xml = xmltodict.unparse(response_dict)
-
-        return response_xml
-
     @staticmethod
     def getDecorationColors(xml_dict):
 
-        response_dict = {'GetDecorationColorsRequest': {'@xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance', '@xmlns': 'http://www.promostandards.org/WSDL/PricingAndConfiguration/1.0.0/', 'wsVersion': {'@xmlns': 'http://www.promostandards.org/WSDL/PricingAndConfiguration/1.0.0/SharedObjects/', '#text': 'Token1'}, 'id': {'@xmlns': 'http://www.promostandards.org/WSDL/PricingAndConfiguration/1.0.0/SharedObjects/', '#text': 'Token1'}, 'password': {'@xmlns': 'http://www.promostandards.org/WSDL/PricingAndConfiguration/1.0.0/SharedObjects/', '#text': 'Token1'}, 'locationId': {'@xmlns': 'http://www.promostandards.org/WSDL/PricingAndConfiguration/1.0.0/SharedObjects/', '#text': '1'}, 'productId': {'@xmlns': 'http://www.promostandards.org/WSDL/PricingAndConfiguration/1.0.0/SharedObjects/', '#text': 'Token1'}, 'decorationId': {'@xmlns': 'http://www.promostandards.org/WSDL/PricingAndConfiguration/1.0.0/SharedObjects/', '#text': '1'}, 'localizationCountry': {'@xmlns': 'http://www.promostandards.org/WSDL/PricingAndConfiguration/1.0.0/SharedObjects/', '#text': 'l1'}, 'localizationLanguage': {'@xmlns': 'http://www.promostandards.org/WSDL/PricingAndConfiguration/1.0.0/SharedObjects/', '#text': 'l1'}}}
+        request_dict = (xml_dict['GetAvailableLocationsRequest'])
 
-        response_xml = xmltodict.unparse(response_dict)
+        request_schema = schemas.PPC_getDecorationColorRequest(**{
+            'ws_version': request_dict['wsVersion']['#text'],
+            'id': request_dict['id']['#text'],
+            'password': request_dict['password']['#text'],
+            'product_id': request_dict['productId']['#text'],
+            'localization_country': request_dict.get('localizationCountry').get('#text'),
+            'localization_language': request_dict.get('localizationLanguage').get('#text'),
+            'decoration_id': request_dict.get('partId').get('#text'),
+        })
 
-        return response_xml
+        db_session = get_session()
+        if (request_schema.product_id):
+            # pass
+            media_content = db_session.query(models.MediaContent).filter(models.MediaContent.product_id==request_schema.product_id).first()
+            xml = getAvailableLocationsResponse(media_content)
+        else:
+            xml = b''
+            media_content = db_session.query(models.MediaContent).all()
+            for content in media_content:
+                xml_part = getAvailableLocationsResponse(media_content)
+                xml+= xml_part
+            
+        if (not media_content):
+            return False
+
+
+        return xml
 
     @staticmethod
     def getFobPoints(xml_dict):
