@@ -2,6 +2,13 @@ from pydantic import BaseModel
 from typing import Optional, List
 from datetime import datetime
 
+
+class AvailableCharge(BaseModel):
+    charge_id: int
+    charge_name: str
+    charge_type: str
+    charge_description: str
+
 class Color(BaseModel):
     color_name: str
     hex: Optional[str]
@@ -142,6 +149,76 @@ class ServiceMessage(BaseModel):
     code: int
     description: str
     severity: str
+
+class Quantity(BaseModel):
+    uom: str
+
+class FutureAvailability(BaseModel):
+    quantity: Quantity
+    available_on: datetime
+
+class Filter(BaseModel):
+    part_id_array: Optional[List[str]]
+    label_size_array: Optional[List[str]]
+    part_color_array: Optional[List[str]]
+
+
+class InventoryLocation(BaseModel):
+    inventory_location_id: str
+    inventory_location_name: Optional[str]
+    postal_code: str
+    country: str
+    inventory_location_quantity: Quantity
+    future_availability_array: List[FutureAvailability]
+
+
+
+class PartInventory(BaseModel):
+    part_id: str
+    main_part: bool
+    part_color: Optional[str]
+    label_size: Optional[str]
+    part_description: Optional[str]
+    quantity_available: Optional[Quantity]
+    manufactured_item: bool
+    buy_to_order: bool
+    replenishment_lead_time: Optional[int]
+    attribute_selection: Optional[str]
+    inventory_location_array: List[InventoryLocation]
+    last_modified: Optional[datetime]
+
+
+class PartPrice(BaseModel):
+    pass
+
+class Configuration(BaseModel):
+    part_array: List[ProductPart]
+    location_array: List[Location]
+    product_id: str
+    currency: str
+    fob_array: List[FobPoint]
+    fob_postal_code: Optional[str]
+    price_type: str
+
+class PPC_Part(BaseModel):
+    part_id: str
+    part_description: Optional[str]
+    part_price_array: Optional[List[PartPrice]]
+    part_group: int
+    next_part_group: Optional[int]
+    part_group_required: bool
+    part_group_description: str
+    # Describes how the amount of partIds that need to be added
+    # to the order based on the number of products ordered.
+    # Example: If 8 partIds would be required per 1 product ordered,
+    # then 8 should be used as the ratio.  If one partId is required
+    # for every 8 products, than use .125
+    ratio: float
+    default_part: Optional[bool]
+    location_id_array: List[str]
+
+
+
 
 class ProductDataBase(BaseModel):
     product_id: str
@@ -307,8 +384,6 @@ class PPC_getAvailableLocationsRequest(PPC):
 class PPC_getAvailableLocationsResponse(PPC):
     available_location_array: List[Location]
 
-
-
 class PPC_getDecorationColorRequest(PPC):
     decoration_id: int
 
@@ -318,7 +393,9 @@ class PPC_getDecorationColorsResponse():
 
 
 class PPC_getFobPointsRequest(PPC):
-    pass
+    product_id: Optional[str]
+    localization_country: str
+    localization_language: str
 
 class PPC_getFobPointsResponse(PPC):
     fob_point_array: List[FobPoint]
@@ -329,8 +406,23 @@ class PPC_getAvailableChargesRequest(PPC):
 
 
 class PPC_getAvailableChargesResponse(PPC):
-    pass
-    # fob_point_array: List[A]
+    available_charge_array: List[AvailableCharge]
+
+
+
+class PPC_getConfigurationAndPricingRequest(PPC):
+    part_id: Optional[str]
+    currency: str
+    fob_id: str
+    price_type: str
+    configuration_type: str
+
+
+class PPC_getConfigurationAndPricingResponse(PPC):
+    available_charge_array: List[AvailableCharge]
+
+
+
 
 
 class Inventory_getInventoryLevelsRequest(BaseModel):
@@ -338,4 +430,10 @@ class Inventory_getInventoryLevelsRequest(BaseModel):
     id: str
     password: Optional[str]
     product_id: str
-    filter: dict
+    filter: Filter
+
+class Inventory_getFilterValuesRequest(BaseModel):
+    ws_version: str
+    id: str
+    password: Optional[str]
+    product_id: str

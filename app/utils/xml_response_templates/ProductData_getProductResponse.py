@@ -3,6 +3,8 @@ from app import schemas
 from typing import List
 import json
 
+from app.utils.helpers import PPC_COMMON_XMLNS, PPC_COMMON_SHARED_OBJECT, COMMON_XSI
+
 
 def xml_response(product_data: schemas.ProductData):
     xsi = 'http://www.w3.org/2001/XMLSchema-instance'
@@ -553,7 +555,6 @@ def xml_response(product_data: schemas.ProductData):
     FobPointArray = etree.Element('FobPointArray', xmlns=xmlns_shared_objects)
     product_data.fob_point_array = json.loads(product_data.fob_point_array)
 
-    print (product_data.fob_point_array)
 
     if product_data.fob_point_array:
         for fob_point in product_data.fob_point_array:

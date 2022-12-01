@@ -60,10 +60,8 @@ def inventory():
     for elem in xml_dict:
         action_type = elem
 
-    print (action_type)
     if action_type=='GetInventoryLevelsRequest':
         response_xml = InventoryOperations.getInventoryLevels(xml_dict)
-        print (response_xml)
 
     if action_type=='GetFilterValuesRequest':
         response_xml = InventoryOperations.getFilterValues(xml_dict)
