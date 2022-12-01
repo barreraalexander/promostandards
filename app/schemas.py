@@ -9,6 +9,26 @@ class AvailableCharge(BaseModel):
     charge_type: str
     charge_description: str
 
+class ChargePrice(BaseModel):
+    x_min_qty: int
+    x_uom: str
+    y_min_qty: int
+    y_uom: str
+    price: float
+    discount_code: Optional[str]
+    repeat_price: Optional[float]
+    repeat_discount_code: Optional[str]
+    price_effective_date: Optional[datetime]
+    price_expiry_date: Optional[datetime]
+
+
+class Charge(AvailableCharge):
+    charge_price_array: List[ChargePrice]
+    charge_applies_ltm: bool
+    charges_per_location: Optional[int]
+    charges_per_color: Optional[int]
+    
+
 class Color(BaseModel):
     color_name: str
     hex: Optional[str]
@@ -187,9 +207,17 @@ class PartInventory(BaseModel):
     inventory_location_array: List[InventoryLocation]
     last_modified: Optional[datetime]
 
-
+# This object contains pricing a product based on the partId.
+# Prices are additive in nature. A configuration that requires
+# three parts with three different prices should be summed
+# together on the purchase order.
 class PartPrice(BaseModel):
-    pass
+    min_quantiy: int
+    price: float
+    discountCode: Optional[str]
+    price_uom: str
+    price_effective_date = datetime
+    price_expiry_date = datetime
 
 class Configuration(BaseModel):
     part_array: List[ProductPart]
@@ -216,6 +244,39 @@ class PPC_Part(BaseModel):
     ratio: float
     default_part: Optional[bool]
     location_id_array: List[str]
+
+
+# This object contains decoration information that are valid for a specific location
+class PPC_Decoration(BaseModel):
+    decoration_id: int
+    decoration_name: Optional[str]
+    decoration_geometry: str
+    decoration_height: Optional[float]
+    decoration_width: Optional[float]
+    decoration_diameter: Optional[float]
+    decoration_uom: str
+    allow_sub_for_default_loaction: bool
+    allow_sub_for_default_method: bool
+    item_part_quantity_ltm: Optional[int]
+    charge_array: Optional[List[Charge]]
+    decoration_units_included: Optional[int]
+    decoration_units_included_uom: Optional[int]
+    decoration_units_max: Optional[int]
+    default_decoration: bool
+    lead_time: Optional[int]
+    rush_lead_time: Optional[int]
+
+
+# This object contains decoration and location details for a given part.
+class PPC_Location(BaseModel):
+    location_id: int
+    location_name: str
+    decoration_array: List[PPC_Decoration]
+    decorations_included: int
+    default_location: bool
+    max_decoration: int
+    min_decoration: int
+    location_rank: Optional[int]
 
 
 
