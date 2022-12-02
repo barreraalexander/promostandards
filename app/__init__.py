@@ -26,6 +26,5 @@ def create_app(config_class=settings):
         populate_database_media_content()
 
 
-        pass
 
     return app

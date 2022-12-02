@@ -25,7 +25,7 @@ def populate_database_location_decoration(count=25):
     db_session = get_session()
     for new_model in new_models:
         db_session.add(new_model)
-
+    print ('here')
     db_session.commit()
 
 

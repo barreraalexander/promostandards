@@ -6,9 +6,6 @@ from app.utils.inventory_helper import InventoryOperations
 from app.utils.media_content_helper import MediaContentOperations
 from app.utils.ppc_helper import PPCOperations
 
-# from app.utils.xml_response_templates.MediaContent_getMediaContentResponse import xml_response as getMediaContentResponse
-# from app.utils.
-
 from app.config import settings
 
 router = Blueprint('api', __name__, url_prefix='/api')
@@ -53,24 +50,36 @@ def products():
 
 @router.route('/inventory')
 def inventory():
+    # return 'hi'
     request_xml =  request.data
+    # print ('XML')
+    
 
     xml_dict = xmltodict.parse(request_xml)
+    print (xml_dict)
+    
 
     for elem in xml_dict:
         action_type = elem
 
+    # print (action_type)
+
     if action_type=='GetInventoryLevelsRequest':
         response_xml = InventoryOperations.getInventoryLevels(xml_dict)
+        # print ('here')
 
     if action_type=='GetFilterValuesRequest':
         response_xml = InventoryOperations.getFilterValues(xml_dict)
 
     if (response_xml):
-        response = Response(response_xml, content_type='text/xml')
+        # response = Response(response_xml, content_type='text/xml')
+        response = Response(response_xml, mimetype='text/xml')
+
         return response
 
-    return 'error'                                                                                                                                
+    print (response)
+    response = Response(status=500)
+    return response                                                                                                                       
 
 
 @router.route('/media_content')
