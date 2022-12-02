@@ -1,70 +1,43 @@
 import xmltodict
 
-XML_BODY = """<GetInventoryLevelsRequest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.promostandards.org/WSDL/Inventory/2.0.0/">
-  <wsVersion xmlns="http://www.promostandards.org/WSDL/Inventory/2.0.0/SharedObjects/">2.0.0</wsVersion>
-  <id xmlns="http://www.promostandards.org/WSDL/Inventory/2.0.0/SharedObjects/">id1</id>
-  <password xmlns="http://www.promostandards.org/WSDL/Inventory/2.0.0/SharedObjects/">password1</password>
-  <productId xmlns="http://www.promostandards.org/WSDL/Inventory/2.0.0/SharedObjects/">Token1</productId>
-  <Filter xmlns="http://www.promostandards.org/WSDL/Inventory/2.0.0/SharedObjects/">
-    <partIdArray>
-      <partId>partId1</partId>
-      <partId>partId2</partId>
-    </partIdArray>
-    <LabelSizeArray>
-      <labelSize>2XL</labelSize>
-      <labelSize>2XS</labelSize>
-    </LabelSizeArray>
-    <PartColorArray>
-      <partColor>partColor1</partColor>
-      <partColor>partColor2</partColor>
-    </PartColorArray>
-  </Filter>
-</GetInventoryLevelsRequest>"""
-
 def test_getInventoryLevels_error(client):
+    # request_dict = {'GetFilterValuesRequest': {'@xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance', '@xmlns': 'http://www.promostandards.org/WSDL/Inventory/2.0.0/', 'wsVersion': {'@xmlns': 'http://www.promostandards.org/WSDL/Inventory/2.0.0/SharedObjects/', '#text': '2.0.0'}, 'id': {'@xmlns': 'http://www.promostandards.org/WSDL/Inventory/2.0.0/SharedObjects/', '#text': 'id1'}, 'password': {'@xmlns': 'http://www.promostandards.org/WSDL/Inventory/2.0.0/SharedObjects/', '#text': 'password1'}, 'productId': {'@xmlns': 'http://www.promostandards.org/WSDL/Inventory/2.0.0/SharedObjects/', '#text': 'Token1'}}}
+    # xml_body = xmltodict.unparse(request_dict)
+    # res = client.get('/api/inventory', data=xml_body, content_type='text/xml')
+    res = client.get('/api/inventory')
 
-    # xml_dict = {'GetInventoryLevelsRequest'}
-    xml_dict = xmltodict.unparse(XML_BODY)
-    xml_body = xmltodict.unparse(xml_dict)
-
-
-    # print (xml_body)
-    res = client.get('/api/inventory', data=xml_body, content_type='text/xml')
-    print ('\n\n')
-    # res = client.get('/api/inventory')
-    # print (xml_dict)
-    print (xml_dict)
-    print ('\n\n')
-
-    # res_dict = xmltodict.parse(res)
-    # print (res.get_data())
-    # print (dir(res))
-    # print (res_dict)
-
-    # print ('\n\n')
-    # print (res.get_data())
-    # print ('\n\n')
-    # print (res.data)
-    # print ('\n\n')
-
-    # print ('\n\n')
-
-    # print (dir(client))
-    # assert res.status_code == 500
-    # assert True
+    assert res.status_code == 500
 
 def test_getInventoryLevels_successful(client):
+    request_dict = {'GetInventoryLevelsRequest': {'@xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance', '@xmlns': 'http://www.promostandards.org/WSDL/Inventory/2.0.0/', 'wsVersion': {'@xmlns': 'http://www.promostandards.org/WSDL/Inventory/2.0.0/SharedObjects/', '#text': '2.0.0'}, 'id': {'@xmlns': 'http://www.promostandards.org/WSDL/Inventory/2.0.0/SharedObjects/', '#text': 'id1'}, 'password': {'@xmlns': 'http://www.promostandards.org/WSDL/Inventory/2.0.0/SharedObjects/', '#text': 'password1'}, 'productId': {'@xmlns': 'http://www.promostandards.org/WSDL/Inventory/2.0.0/SharedObjects/', '#text': 'Token1'}, 'Filter': {'@xmlns': 'http://www.promostandards.org/WSDL/Inventory/2.0.0/SharedObjects/', 'partIdArray': {'partId': ['partId1', 'partId2']}, 'LabelSizeArray': {'labelSize': ['2XL', '2XS']}, 'PartColorArray': {'partColor': ['partColor1', 'partColor2']}}}}
+    xml_body = xmltodict.unparse(request_dict)
+    res = client.get('/api/inventory', data=xml_body, content_type='text/xml')
+    
+    assert res.status_code == 200
+
+
+
+def test_getFilterValues_error(client):
+    # request_dict = {'GetFilterValuesRequest': {'@xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance', '@xmlns': 'http://www.promostandards.org/WSDL/Inventory/2.0.0/', 'wsVersion': {'@xmlns': 'http://www.promostandards.org/WSDL/Inventory/2.0.0/SharedObjects/', '#text': '2.0.0'}, 'id': {'@xmlns': 'http://www.promostandards.org/WSDL/Inventory/2.0.0/SharedObjects/', '#text': 'id1'}, 'password': {'@xmlns': 'http://www.promostandards.org/WSDL/Inventory/2.0.0/SharedObjects/', '#text': 'password1'}, 'productId': {'@xmlns': 'http://www.promostandards.org/WSDL/Inventory/2.0.0/SharedObjects/', '#text': 'Token1'}}}
+    # xml_body = xmltodict.unparse(request_dict)
+    # res = client.get('/api/inventory', data=xml_body, content_type='text/xml')
     res = client.get('/api/inventory')
-    # print (dir(res))
-    # print (res.get_data())
+
+    assert res.status_code == 500
+
+def test_getFilterValues_successful(client):
+    request_dict = {'GetInventoryLevelsRequest': {'@xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance', '@xmlns': 'http://www.promostandards.org/WSDL/Inventory/2.0.0/', 'wsVersion': {'@xmlns': 'http://www.promostandards.org/WSDL/Inventory/2.0.0/SharedObjects/', '#text': '2.0.0'}, 'id': {'@xmlns': 'http://www.promostandards.org/WSDL/Inventory/2.0.0/SharedObjects/', '#text': 'id1'}, 'password': {'@xmlns': 'http://www.promostandards.org/WSDL/Inventory/2.0.0/SharedObjects/', '#text': 'password1'}, 'productId': {'@xmlns': 'http://www.promostandards.org/WSDL/Inventory/2.0.0/SharedObjects/', '#text': 'Token1'}, 'Filter': {'@xmlns': 'http://www.promostandards.org/WSDL/Inventory/2.0.0/SharedObjects/', 'partIdArray': {'partId': ['partId1', 'partId2']}, 'LabelSizeArray': {'labelSize': ['2XL', '2XS']}, 'PartColorArray': {'partColor': ['partColor1', 'partColor2']}}}}
+    xml_body = xmltodict.unparse(request_dict)
+    res = client.get('/api/inventory', data=xml_body, content_type='text/xml')
+    
+    assert res.status_code == 200
 
 
 
-    # assert res.status_code == 200
-    assert True
-
-# def test_getFilterValues(client):
+# def test_getInventoryLevels_fail_no_body(client):
+#     request_dict = {'GetInventoryLevelsRequest': {'@xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance', '@xmlns': 'http://www.promostandards.org/WSDL/Inventory/2.0.0/', 'wsVersion': {'@xmlns': 'http://www.promostandards.org/WSDL/Inventory/2.0.0/SharedObjects/', '#text': '2.0.0'}, 'id': {'@xmlns': 'http://www.promostandards.org/WSDL/Inventory/2.0.0/SharedObjects/', '#text': 'id1'}, 'password': {'@xmlns': 'http://www.promostandards.org/WSDL/Inventory/2.0.0/SharedObjects/', '#text': 'password1'}, 'productId': {'@xmlns': 'http://www.promostandards.org/WSDL/Inventory/2.0.0/SharedObjects/', '#text': 'Token1'}, 'Filter': {'@xmlns': 'http://www.promostandards.org/WSDL/Inventory/2.0.0/SharedObjects/', 'partIdArray': {'partId': ['partId1', 'partId2']}, 'LabelSizeArray': {'labelSize': ['2XL', '2XS']}, 'PartColorArray': {'partColor': ['partColor1', 'partColor2']}}}}
+#     # xml_body = xmltodict.unparse(request_dict)
+#     # res = client.get('/api/inventory', data=xml_body, content_type='text/xml')
 #     res = client.get('/api/inventory')
-#     # print (dir(res))
-#     # assert res.status_code == 200
-#     assert True
+    
+#     assert res.status_code == 500

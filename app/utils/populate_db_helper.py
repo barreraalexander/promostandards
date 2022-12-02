@@ -25,7 +25,6 @@ def populate_database_location_decoration(count=25):
     db_session = get_session()
     for new_model in new_models:
         db_session.add(new_model)
-    print ('here')
     db_session.commit()
 
 
@@ -261,7 +260,6 @@ def populate_database_productdata(count=25):
 
     products = db_session.query(models.ProductData).all()
     if (products):
-        print ('Product Data Successfully Created')
         return
 
     
@@ -340,7 +338,6 @@ def populate_database_media_content(count=25):
 
     media_contents = db_session.query(models.MediaContent).all()
     if (media_contents):
-        print ('Media Content Data Successfully Created')
         return
 
 

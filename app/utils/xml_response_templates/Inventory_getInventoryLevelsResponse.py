@@ -138,7 +138,6 @@ def xml_response(product_data):
                 Quantity = etree.Element('Quantity')
             
                 inventoryLocationQuantity.append(Quantity)
-                # print(inventory_location.inventory_location_quantity)
 
                 InventoryLocation.append(inventoryLocationQuantity)
 

@@ -13,6 +13,18 @@ router = Blueprint('api', __name__, url_prefix='/api')
 from app.utils.populate_db_helper import populate_database_location_decoration, populate_database_productdata
 from app.database import get_session
 
+
+@router.route('/process_dict')
+def process():
+    request_xml =  request.data
+
+    #convert the xml to a python dict
+    xml_dict = xmltodict.parse(request_xml)
+    print('\n\n')
+    print (xml_dict)
+    print('\n\n')
+    return xml_dict
+
 @router.route('/product_data')
 def products():
 
@@ -50,34 +62,24 @@ def products():
 
 @router.route('/inventory')
 def inventory():
-    # return 'hi'
     request_xml =  request.data
-    # print ('XML')
-    
 
     xml_dict = xmltodict.parse(request_xml)
-    print (xml_dict)
     
-
     for elem in xml_dict:
         action_type = elem
 
-    # print (action_type)
-
     if action_type=='GetInventoryLevelsRequest':
         response_xml = InventoryOperations.getInventoryLevels(xml_dict)
-        # print ('here')
 
     if action_type=='GetFilterValuesRequest':
         response_xml = InventoryOperations.getFilterValues(xml_dict)
 
     if (response_xml):
-        # response = Response(response_xml, content_type='text/xml')
         response = Response(response_xml, mimetype='text/xml')
 
         return response
 
-    print (response)
     response = Response(status=500)
     return response                                                                                                                       
 

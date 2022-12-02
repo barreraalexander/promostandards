@@ -5,7 +5,6 @@ import json
 from datetime import datetime
 
 
-
 def xml_response(product_data: schemas.ProductData):
     xsi = 'http://www.w3.org/2001/XMLSchema-instance'
     xmlns = 'http://www.promostandards.org/WSDL/Inventory/2.0.0/'
@@ -15,7 +14,6 @@ def xml_response(product_data: schemas.ProductData):
     product_data.product_part_array = json.loads(product_data.product_part_array)
     label_size_array = ['xl', 'm', 'l']
     part_color_array = ['red', 'green', 'blue']
-    print (label_size_array)
 
 
     filter = schemas.Filter(**{
