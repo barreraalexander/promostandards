@@ -38,7 +38,6 @@ class PPCOperations:
     def getDecorationColors(xml_dict):
 
         request_dict = (xml_dict['GetDecorationColorsRequest'])
-        print (request_dict)
         request_schema = schemas.PPC_getDecorationColorsRequest(**{
             'ws_version': request_dict['wsVersion']['#text'],
             'id': request_dict['id']['#text'],
