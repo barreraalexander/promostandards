@@ -8,7 +8,6 @@ from app.utils.helpers import COMMON_XSI, PPC_COMMON_SHARED_OBJECT, PPC_COMMON_X
 
 
 def xml_response(media_content):
-    # root = etree.Element('Color', xsi="http://www.w3.org/2001/XMLSchema-instance", xmlns="http://www.promostandards.org/WSDL/PricingAndConfiguration/1.0.0/")
     xml = b''
 
     location_array = [

@@ -3,8 +3,6 @@ from typing import Optional, List
 from datetime import datetime
 
 
-class AvailableLocation(BaseModel):
-    pass
 
 class AvailableCharge(BaseModel):
     charge_id: int
@@ -84,6 +82,10 @@ class Decoration(BaseModel):
 class Location(BaseModel):
     location_id: int
     location_name: str
+
+class AvailableLocation(Location):
+    pass 
+
 
 class LocationDecoration(BaseModel):
     location_name: str
@@ -165,6 +167,15 @@ class FobPoint(BaseModel):
     fob_city: str
     fob_state: str
     fob_country: str
+
+class Currency(BaseModel):
+    currency: str
+
+class PPC_FobPoint(FobPoint):
+    currency_supported_array: List[str]
+    # list of product ids
+    product_array: List[str]
+
 
 class ProductCategory(BaseModel):
     category: str

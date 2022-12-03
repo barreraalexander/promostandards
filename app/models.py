@@ -8,15 +8,13 @@ from sqlalchemy.sql.sqltypes import TIMESTAMP
 class User(Base):
     __tablename__ = 'users'
 
-
     id = Column(String, primary_key=True, nullable=False)
     username = Column(String, nullable=False)
     password = Column(String, nullable=False)
 
-
+#PRODUCT DATA MODELS 
 class ProductData(Base):
     __tablename__ = 'products'
-
 
     product_id = Column(String, primary_key=True, nullable=False)
     product_name = Column(String, nullable=False)
@@ -47,11 +45,9 @@ class ProductData(Base):
     default_run_charge = Column(String, nullable=True)    
     fob_point_array = Column(String, nullable=False)
 
-# inventory is just a composition of products
-# class Inventory(Base):
-#     __tablename__ = 'inventory'
-#     pass
 
+
+# MEDIA CONTENT MODELS
 class MediaContent(Base):
     __tablename__ = 'media_content'
 
@@ -73,22 +69,36 @@ class MediaContent(Base):
     
 
 
-# i need to get into location decoration
-# create a table that will store random location decorations
-# when a new product_data model is created, the ids should be looked up, and get the required location decorations, convert the list
+# PPC MODELS
+class AvailableLocation(Base):
+    __tablename__ = 'locations'
+    location_id = Column(Integer, primary_key=True, nullable=False)
+    location_name = Column(String, nullable=False)
 
 
+class DecorationColor(Base):
+    __tablename__ = 'decoration_colors'
 
-# class Location(Base):
-#     __tablename__ = 'location'
+    product_id = Column(String, primary_key=True, nullable=False)
+    color_array = Column(String, nullable=False)
+    location_id = Column(String, nullable=False)
+    decoration_method_array = Column(String, nullable=False)
+    pms_match = Column(bool, nullable=False)
+    full_color = Column(bool, nullable=False)
 
-#     location_id = Column()
+class FobPoint(Base):
+    __tablename__ = 'fob_points'
 
-
+    fob_id = Column(String, primary_key=True, nullable=False)
+    fob_postal_code = Column(String, nullable=False)
+    fob_city = Column(String, nullable=False)
+    fob_state = Column(String, nullable=False)
+    fob_country = Column(String, nullable=False)
+    currency_supported_array = Column(String, nullable=False)
+    product_array = Column(String, nullable=False)
 
 class LocationDecoration(Base):
-    __tablename__ = 'location_decoration'
-
+    __tablename__ = 'location_decorations'
 
     location_name = Column(String, primary_key=True, nullable=False)
     max_imprint_colors = Column(Integer, nullable=True)
@@ -96,6 +106,34 @@ class LocationDecoration(Base):
     location_decoration_combo_default = Column(Boolean, nullable=False)
     price_includes = Column(Boolean, nullable=False)
     
+
+
+class AvailableCharges(Base):
+    __tablename__ = 'available_charges'
+
+    charged_id = Column(Integer, primary_key=True, nullable=False)
+    charge_name = Column(String, nullable=False)
+    charge_type = Column(String, nullable=False)
+    charge_description = Column(String, nullable=False)
+
+class Configuration(Base):
+    __tablename__ = 'configurations'
+
+    part_array = Column(String, nullable=False)
+    location_array = Column(String, nullable=False)
+    product_id = Column(String, nullable=False)
+    currency = Column(String, nullable=False)
+    fob_array = Column(String, nullable=False)
+    fob_postal_code = Column(String, nullable=True)
+    price_type = Column(String, nullable=True)
+
+
+
+
+
+
+
+
 
 # class PPC(Base):
 #     __tablename__ = 'ppc'

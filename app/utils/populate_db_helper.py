@@ -10,6 +10,7 @@ import json
 
 TRUE_OR_FALSE = [False, True]
 
+# CREATE PPC ENTITIES
 def populate_database_location_decoration(count=25):
     new_location_decorations = [schemas.LocationDecoration(**{
         'location_name' :f"Token{i}",
@@ -28,6 +29,7 @@ def populate_database_location_decoration(count=25):
     db_session.commit()
 
 
+# CREATE PRODUCTDATA ENTITIES
 def populate_database_productdata(count=25):
     db_session = get_session()
     
@@ -263,7 +265,7 @@ def populate_database_productdata(count=25):
         return
 
     
-
+# CREATE MEDIA_CONTENT ENTITIES
 def populate_database_media_content(count=25):
 
     class_types = [
