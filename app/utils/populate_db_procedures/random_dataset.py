@@ -1,0 +1,1 @@
+TRUE_OR_FALSE = [True, False]

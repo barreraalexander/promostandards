@@ -1,10 +1,12 @@
-from flask import Flask, jsonify
+from flask import Flask
 from app.config import settings
 from app import models
 from app.database import engine
 
-from app.utils.populate_db_helper import populate_database_location_decoration, populate_database_productdata, populate_database_media_content
-
+from app.utils.populate_db_procedures.Inventory_populate import populate as populate_inventory
+from app.utils.populate_db_procedures.MediaContent_populate import populate as populate_mediacontent
+# from app.utils.populate_db_procedures.PPC_populate
+# from app.utils.populate_db_procedures.ProductData_populate
 
 def create_app(config_class=settings):
     models.Base.metadata.create_all(bind=engine)
@@ -21,9 +23,8 @@ def create_app(config_class=settings):
         models.Base.metadata.drop_all(bind=engine)
         models.Base.metadata.create_all(bind=engine)
 
-        populate_database_location_decoration()
-        populate_database_productdata()
-        populate_database_media_content()
+        populate_inventory()
+        populate_mediacontent()
 
 
 

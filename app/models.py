@@ -83,8 +83,8 @@ class DecorationColor(Base):
     color_array = Column(String, nullable=False)
     location_id = Column(String, nullable=False)
     decoration_method_array = Column(String, nullable=False)
-    pms_match = Column(bool, nullable=False)
-    full_color = Column(bool, nullable=False)
+    pms_match = Column(Boolean, nullable=False)
+    full_color = Column(Boolean, nullable=False)
 
 class FobPoint(Base):
     __tablename__ = 'fob_points'
@@ -121,20 +121,8 @@ class Configuration(Base):
 
     part_array = Column(String, nullable=False)
     location_array = Column(String, nullable=False)
-    product_id = Column(String, nullable=False)
+    product_id = Column(String, nullable=False, primary_key=True)
     currency = Column(String, nullable=False)
     fob_array = Column(String, nullable=False)
     fob_postal_code = Column(String, nullable=True)
     price_type = Column(String, nullable=True)
-
-
-
-
-
-
-
-
-
-# class PPC(Base):
-#     __tablename__ = 'ppc'
-#     pass
