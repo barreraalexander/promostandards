@@ -30,18 +30,23 @@ class Charge(AvailableCharge):
     charges_per_color: Optional[int]
     
 class PPC_Color(BaseModel):
-    color_id: str
+    color_id: int
     color_name: str
+
+# class PPC_Color(BaseModel):
+#     color_id: str
+#     color_name: str
 
 class DecorationMethod(BaseModel):
     decoration_id: int
-    deocoration_name: str
+    decoration_name: str
 
-class DecorationColors(BaseModel):
+class DecorationColor(BaseModel):
     color_array: List[PPC_Color]
     product_id: str
     location_id: str
-    deocoration_method_array: List[DecorationMethod]
+    decoration_method_array: List[DecorationMethod]
+    # deocoration_method_array: List[DecorationMethod]
     pms_match: bool
     full_color: bool
 

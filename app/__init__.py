@@ -3,10 +3,10 @@ from app.config import settings
 from app import models
 from app.database import engine
 
-from app.utils.populate_db_procedures.Inventory_populate import populate as populate_inventory
+from app.utils.populate_db_procedures.ProductData_populate import populate as populate_productdata
 from app.utils.populate_db_procedures.MediaContent_populate import populate as populate_mediacontent
-# from app.utils.populate_db_procedures.PPC_populate
-# from app.utils.populate_db_procedures.ProductData_populate
+from app.utils.populate_db_procedures.PPC_populate import populate as populate_ppc
+from app.utils.populate_db_procedures.Inventory_populate import populate as populate_inventory
 
 def create_app(config_class=settings):
     models.Base.metadata.create_all(bind=engine)
@@ -23,8 +23,11 @@ def create_app(config_class=settings):
         models.Base.metadata.drop_all(bind=engine)
         models.Base.metadata.create_all(bind=engine)
 
-        populate_inventory()
-        populate_mediacontent()
+        # print (populate_inventory)
+        # populate_productdata(count=100)
+        # populate_mediacontent(count=50)
+        # populate_inventory(count=100)
+        populate_ppc(count=300)
 
 
 

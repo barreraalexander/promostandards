@@ -11,7 +11,6 @@ from app.utils.populate_db_procedures.random_dataset import TRUE_OR_FALSE
 
 
 def populate(count=25):
-
     class_types = [
         schemas.ClassType(**{
             'class_type' : randrange(0, 10),

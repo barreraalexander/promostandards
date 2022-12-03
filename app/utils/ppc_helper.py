@@ -24,12 +24,14 @@ class PPCOperations:
         })
 
         db_session = get_session()
-        media_content = db_session.query(models.MediaContent).filter(models.MediaContent.product_id==request_schema.product_id).first()
-        if (not media_content):
+        # locations = db_session.query(models.AvailableLocation).filter(models.AvailableLocation.location_id==request_schema.product_id).first()
+        locations = db_session.query(models.AvailableLocation).all()
+        print (locations)
+        if (not locations):
             return False
 
 
-        xml = getAvailableLocationsResponse(media_content)
+        xml = getAvailableLocationsResponse(locations)
 
         return xml
 
@@ -51,16 +53,17 @@ class PPCOperations:
 
         db_session = get_session()
         if (request_schema.product_id):
-            media_content = db_session.query(models.MediaContent).filter(models.MediaContent.product_id==request_schema.product_id).first()
-            xml = getDecorationColor(media_content)
+            decoration_color = db_session.query(models.DecorationColor).filter(models.DecorationColor.product_id==request_schema.product_id).first()
+            xml = getDecorationColor([decoration_color])
         else:
-            xml = b''
-            media_content = db_session.query(models.MediaContent).all()
-            for content in media_content:
-                xml_part = getDecorationColor(media_content)
-                xml+= xml_part
+            decoration_colors = db_session.query(models.DecorationColor).all()
+            xml = getDecorationColor(decoration_color)
+            # xml = b''
+            # for content in decoration_colors:
+                # xml_part = getDecorationColor(decoration_colors)
+                # xml+= xml_part
             
-        if (not media_content):
+        if (not xml):
             return False
 
 

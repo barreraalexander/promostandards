@@ -7,19 +7,11 @@ from random import randrange, random
 from app.utils.helpers import COMMON_XSI, PPC_COMMON_SHARED_OBJECT, PPC_COMMON_XMLNS
 
 
-def xml_response(media_content):
+def xml_response(locations_array: List[schemas.AvailableLocation]):
     xml = b''
 
-    location_array = [
-        schemas.Location(
-            location_name=f'Token{i}',
-            location_id=randrange(1, 10),
-        )
-    for i in range(randrange(1, 10))]
- 
-    media_content.location_array = json.loads(media_content.location_array)
-    if location_array:
-        for location in location_array:
+    if locations_array:
+        for location in locations_array:
             # location_schema = schemas.Location(**location)
             root = etree.Element('AvailableLocation', xmlns=PPC_COMMON_XMLNS, xsi=COMMON_XSI)
 

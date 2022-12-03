@@ -11,30 +11,30 @@ from app.utils.populate_db_procedures.random_dataset import TRUE_OR_FALSE
 
 def populate(count=25):
     db_session = get_session()
-    
-    # location_decorations = db_session.query(models.ProductData).all()
 
-    location_decorations = [schemas.LocationDecoration(**{
-        'location_name' :f"Token{i}",
-        'max_imprint_colors': randrange(0,6),
-        'decoration_name':f"Token{i}",
-        'location_decoration_combo_default': choice(TRUE_OR_FALSE),
-        'price_includes' : choice(TRUE_OR_FALSE)
-    }) for i in range(count)]
+    location_decorations = [
+        schemas.LocationDecoration(**{
+            'location_name' :f"Token{i}",
+            'max_imprint_colors': randrange(0,6),
+            'decoration_name':f"Token{i}",
+            'location_decoration_combo_default': choice(TRUE_OR_FALSE),
+            'price_includes' : choice(TRUE_OR_FALSE)
+        }) for i in range(count)
+    ]
 
     product_marketing_points = [
         schemas.ProductMarketingPoint(**{
             'point_type':f"Token{i}",
             'point_copy':f"Token{i}"
         }).dict()
-        for i in range(10)
+        for i in range(randrange(1, 30))
     ]
 
     product_keywords = [
         schemas.ProductKeyword(**{
             'keyword' :f"Token{i}"
         }).dict()
-        for i in range(10)
+        for i in range(randrange(1, 30))
     ]
 
 
@@ -43,7 +43,7 @@ def populate(count=25):
             'category' :f"Token{i}",
             'sub_category' :f"Token{i}"
         }).dict()
-        for i in range(10)
+        for i in range(randrange(1, 30))
     ]
 
     related_products = [
@@ -52,7 +52,7 @@ def populate(count=25):
             'product_id' :f"Token{i}",
             'part_id' :f"Token{i}"
         }).dict()
-        for i in range(10)
+        for i in range(randrange(1, 30))
     ]
 
     colors = [
@@ -63,7 +63,7 @@ def populate(count=25):
             'approximate_pms' :f"Token{i}",
             'standard_color_name' :f"Token{i}"
         }).dict()
-        for i in range(10)
+        for i in range(randrange(1, 30))
     ]
 
     
@@ -73,7 +73,7 @@ def populate(count=25):
             'specification_uom' :f"Token{i}",
             'measurement_value' :f"Token{i}"
         }).dict()
-        for i in range(10)
+        for i in range(randrange(1, 30))
     ]
 
     product_packagings = [
@@ -89,7 +89,7 @@ def populate(count=25):
             'weight_uom' :f"Token{i}",
             'weight' : uniform(1, 10)
         }).dict()
-        for i in range(10)
+        for i in range(randrange(1, 30))
     ]
 
 
@@ -105,7 +105,7 @@ def populate(count=25):
             'weight_uom' :f"Token{i}",
             'weight' : uniform(1, 10)
         }).dict()
-        for i in range(10)
+        for i in range(randrange(1, 30))
     ]
 
 
@@ -152,7 +152,7 @@ def populate(count=25):
                 'standard_color_name':f"Token{i}"
             }).dict()
         }).dict()
-        for i in range(10)
+        for i in range(randrange(1, 30))
     ]
 
     product_prices = [
@@ -162,7 +162,7 @@ def populate(count=25):
             'price' : uniform(1, 100),
             'discount_code' :f"Token{i}"
         }).dict()
-        for i in range(10)
+        for i in range(randrange(1, 30))
     ]
 
 
@@ -173,7 +173,7 @@ def populate(count=25):
             'description' :f"Token{i}",
             'product_price_array' : product_prices
         }).dict()
-        for i in range(10)
+        for i in range(randrange(1, 30))
     ]
 
 
@@ -185,7 +185,7 @@ def populate(count=25):
             'fob_state' :f"Token{i}",
             'fob_country' :f"Token{i}",
         }).dict()
-        for i in range(10)
+        for i in range(randrange(1, 30))
     ]
 
     new_products = [schemas.ProductData(**{
@@ -212,7 +212,7 @@ def populate(count=25):
         'primary_image_url':f"Token{i}",
         'product_price_group_array': product_price_groups,
         'compliance_info_available': choice(TRUE_OR_FALSE),
-        'unspsc_commodity_code': randrange(10),
+        'unspsc_commodity_code': randrange(randrange(1, 30)),
         'imprint_size' :f"Token{i}",
         'default_set_up_charge':f"Token{i}",
         'default_run_charge':f"Token{i}",
@@ -235,6 +235,7 @@ def populate(count=25):
         new_model.fob_point_array =  json.dumps(new_model.fob_point_array, default=str)
         
         db_session.add(new_model)
+        # print (new_model)
 
     db_session.commit()
 
