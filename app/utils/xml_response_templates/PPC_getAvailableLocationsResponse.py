@@ -2,28 +2,37 @@ from lxml import etree
 from app import schemas
 from typing import List
 import json
+from random import randrange, random
+
+from app.utils.helpers import COMMON_XSI, PPC_COMMON_SHARED_OBJECT, PPC_COMMON_XMLNS
+
 
 def xml_response(media_content):
-    root = etree.Element('Color', xsi="http://www.w3.org/2001/XMLSchema-instance", xmlns="http://www.promostandards.org/WSDL/PricingAndConfiguration/1.0.0/")
-    media_content.location_array = json.loads(media_content.location_decoration_array)
-    # media_content.location_array = json.loads(media_content.color)
-    if media_content.location_array:
-        for location in media_content.location_array:
-            location_schema = schemas.Location(**location)
-            Location = etree.Element('Location')
+    # root = etree.Element('Color', xsi="http://www.w3.org/2001/XMLSchema-instance", xmlns="http://www.promostandards.org/WSDL/PricingAndConfiguration/1.0.0/")
+    xml = b''
 
-            locationId = etree.Element('locationId', xmlns="http://www.promostandards.org/WSDL/PricingAndConfiguration/1.0.0/SharedObjects/")
-            locationId.text = str(location_schema.location_id)                
-            Location.append(locationId)
+    location_array = [
+        schemas.Location(
+            location_name=f'Token{i}',
+            location_id=randrange(1, 10),
+        )
+    for i in range(randrange(1, 10))]
+ 
+    media_content.location_array = json.loads(media_content.location_array)
+    if location_array:
+        for location in location_array:
+            # location_schema = schemas.Location(**location)
+            root = etree.Element('AvailableLocation', xmlns=PPC_COMMON_XMLNS, xsi=COMMON_XSI)
 
-            locationName = etree.Element('locationName', xmlns="http://www.promostandards.org/WSDL/PricingAndConfiguration/1.0.0/SharedObjects/")
-            locationName.text = str(location_schema.location_name)                
-            Location.append(locationName)
+            locationId = etree.Element('locationId', xmlns=PPC_COMMON_SHARED_OBJECT)
+            locationId.text = str(location.location_id)                
+            root.append(locationId)
 
-
-            root.append(Location)
-    
-    xml = etree.tostring(root, pretty_print=True)
+            locationName = etree.Element('locationName', xmlns=PPC_COMMON_SHARED_OBJECT)
+            locationName.text = str(location.location_name)                
+            root.append(locationName)
+            xml_part = etree.tostring(root, pretty_print=True)
+            xml += xml_part
     return xml
 
 # def xml_response()

@@ -37,24 +37,23 @@ class PPCOperations:
     @staticmethod
     def getDecorationColors(xml_dict):
 
-        request_dict = (xml_dict['GetAvailableLocationsRequest'])
-
-        request_schema = schemas.PPC_getDecorationColorRequest(**{
+        request_dict = (xml_dict['GetDecorationColorsRequest'])
+        print (request_dict)
+        request_schema = schemas.PPC_getDecorationColorsRequest(**{
             'ws_version': request_dict['wsVersion']['#text'],
             'id': request_dict['id']['#text'],
             'password': request_dict['password']['#text'],
+            'location_id': request_dict['locationId']['#text'],
             'product_id': request_dict['productId']['#text'],
+            'decoration_id': request_dict.get('decorationId').get('#text'),
             'localization_country': request_dict.get('localizationCountry').get('#text'),
             'localization_language': request_dict.get('localizationLanguage').get('#text'),
-            'decoration_id': request_dict.get('partId').get('#text'),
         })
 
         db_session = get_session()
         if (request_schema.product_id):
-            # pass
             media_content = db_session.query(models.MediaContent).filter(models.MediaContent.product_id==request_schema.product_id).first()
-            # xml = getAvailableLocationsResponse(media_content)
-            xml = get(media_content)
+            xml = getDecorationColor(media_content)
         else:
             xml = b''
             media_content = db_session.query(models.MediaContent).all()

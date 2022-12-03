@@ -14,16 +14,6 @@ from app.utils.populate_db_helper import populate_database_location_decoration, 
 from app.database import get_session
 
 
-@router.route('/process_dict')
-def process():
-    request_xml =  request.data
-
-    #convert the xml to a python dict
-    xml_dict = xmltodict.parse(request_xml)
-    print('\n\n')
-    print (xml_dict)
-    print('\n\n')
-    return xml_dict
 
 @router.route('/product_data')
 def products():

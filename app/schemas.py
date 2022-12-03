@@ -3,6 +3,9 @@ from typing import Optional, List
 from datetime import datetime
 
 
+class AvailableLocation(BaseModel):
+    pass
+
 class AvailableCharge(BaseModel):
     charge_id: int
     charge_name: str
@@ -28,6 +31,21 @@ class Charge(AvailableCharge):
     charges_per_location: Optional[int]
     charges_per_color: Optional[int]
     
+class PPC_Color(BaseModel):
+    color_id: str
+    color_name: str
+
+class DecorationMethod(BaseModel):
+    decoration_id: int
+    deocoration_name: str
+
+class DecorationColors(BaseModel):
+    color_array: List[PPC_Color]
+    product_id: str
+    location_id: str
+    deocoration_method_array: List[DecorationMethod]
+    pms_match: bool
+    full_color: bool
 
 class Color(BaseModel):
     color_name: str
@@ -445,7 +463,7 @@ class PPC_getAvailableLocationsRequest(PPC):
 class PPC_getAvailableLocationsResponse(PPC):
     available_location_array: List[Location]
 
-class PPC_getDecorationColorRequest(PPC):
+class PPC_getDecorationColorsRequest(PPC):
     decoration_id: int
 
 class PPC_getDecorationColorsResponse():
