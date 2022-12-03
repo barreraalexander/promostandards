@@ -176,10 +176,14 @@ class FobPoint(BaseModel):
 class Currency(BaseModel):
     currency: str
 
+
+class PPC_Product(BaseModel):
+    product_id: str
+
+
 class PPC_FobPoint(FobPoint):
-    currency_supported_array: List[str]
-    # list of product ids
-    product_array: List[str]
+    currency_supported_array: List[Currency]
+    product_array: List[PPC_Product]
 
 
 class ProductCategory(BaseModel):
@@ -246,21 +250,12 @@ class PartInventory(BaseModel):
 # three parts with three different prices should be summed
 # together on the purchase order.
 class PartPrice(BaseModel):
-    min_quantiy: int
+    min_quantity: int
     price: float
-    discountCode: Optional[str]
+    discount_code: Optional[str]
     price_uom: str
     price_effective_date = datetime
     price_expiry_date = datetime
-
-class Configuration(BaseModel):
-    part_array: List[ProductPart]
-    location_array: List[Location]
-    product_id: str
-    currency: str
-    fob_array: List[FobPoint]
-    fob_postal_code: Optional[str]
-    price_type: str
 
 class PPC_Part(BaseModel):
     part_id: str
@@ -278,6 +273,16 @@ class PPC_Part(BaseModel):
     ratio: float
     default_part: Optional[bool]
     location_id_array: List[str]
+
+
+class Configuration(BaseModel):
+    part_array: List[PPC_Part]
+    location_array: List[Location]
+    product_id: str
+    currency: str
+    fob_array: List[FobPoint]
+    fob_postal_code: Optional[str]
+    price_type: str
 
 
 # This object contains decoration information that are valid for a specific location
@@ -444,17 +449,6 @@ class MediaContent_getMediaDateModifiedResponse(MediaContent):
     media_date_modified_array: List[MediaContent]
 
 
-# class 
-
-    # product_category_a
-
-# class ProductData(ProductDataBase):
-#     pass
-
-# class ProductDataPart(ProductDataBase):
-#     pass
-
-
 class Inventory:
     pass
 
@@ -480,7 +474,8 @@ class PPC_getAvailableLocationsResponse(PPC):
     available_location_array: List[Location]
 
 class PPC_getDecorationColorsRequest(PPC):
-    decoration_id: int
+    product_id: Optional[str]
+    decoration_id: Optional[int]
 
 class PPC_getDecorationColorsResponse():
     decoration_colors: List[Color]

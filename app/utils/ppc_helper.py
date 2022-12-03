@@ -41,11 +41,11 @@ class PPCOperations:
 
         request_dict = (xml_dict['GetDecorationColorsRequest'])
         request_schema = schemas.PPC_getDecorationColorsRequest(**{
-            'ws_version': request_dict['wsVersion']['#text'],
-            'id': request_dict['id']['#text'],
-            'password': request_dict['password']['#text'],
-            'location_id': request_dict['locationId']['#text'],
-            'product_id': request_dict['productId']['#text'],
+            'ws_version': request_dict['wsVersion'].get['#text'],
+            'id': request_dict['id'].get['#text'],
+            'password': request_dict['password'].get['#text'],
+            'location_id': request_dict['locationId'].get['#text'],
+            'product_id': request_dict['productId'].get('#text'),
             'decoration_id': request_dict.get('decorationId').get('#text'),
             'localization_country': request_dict.get('localizationCountry').get('#text'),
             'localization_language': request_dict.get('localizationLanguage').get('#text'),
@@ -57,12 +57,7 @@ class PPCOperations:
             xml = getDecorationColor([decoration_color])
         else:
             decoration_colors = db_session.query(models.DecorationColor).all()
-            xml = getDecorationColor(decoration_color)
-            # xml = b''
-            # for content in decoration_colors:
-                # xml_part = getDecorationColor(decoration_colors)
-                # xml+= xml_part
-            
+            xml = getDecorationColor(decoration_colors)
         if (not xml):
             return False
 
@@ -83,14 +78,11 @@ class PPCOperations:
         })
 
         db_session = get_session()
-        product_data = db_session.query(models.ProductData).filter(models.ProductData.product_id==request_schema.product_id).first()
-        if (not product_data):
+        fob_data = db_session.query(models.FobPoint).filter(models.FobPoint.fob_id==request_schema.product_id).first()
+        if (not fob_data):
             return False
 
-        xml = getFobPoints(product_data)
-
-
-
+        xml = getFobPoints([fob_data])
         return xml
 
 
@@ -108,11 +100,12 @@ class PPCOperations:
         })
 
         db_session = get_session()
-        product_data = db_session.query(models.ProductData).filter(models.ProductData.product_id==request_schema.product_id).first()
-        if (not product_data):
+        available_charge = db_session.query(models.AvailableCharge).all()
+        # available_charge = db_session.query(models.AvailableCharge).filter(models.AvailableCharge)first()
+        if (not available_charge):
             return False
 
-        xml = getAvailableCharges(product_data)
+        xml = getAvailableCharges(available_charge)
 
         return xml
 
@@ -135,10 +128,11 @@ class PPCOperations:
         })
 
         db_session = get_session()
-        product_data = db_session.query(models.ProductData).filter(models.ProductData.product_id==request_schema.product_id).first()
-        if (not product_data):
+        # configurations = db_session.query(models.Configuration).all()
+        configuration = db_session.query(models.Configuration).first()
+        if (not configuration):
             return False
 
-        xml = getConfigurationAndPricing(product_data)
+        xml = getConfigurationAndPricing(configuration)
 
         return xml

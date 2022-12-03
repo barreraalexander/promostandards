@@ -27,7 +27,7 @@ def create_app(config_class=settings):
         # populate_productdata(count=100)
         # populate_mediacontent(count=50)
         # populate_inventory(count=100)
-        populate_ppc(count=300)
+        populate_ppc(count=50)
 
 
 

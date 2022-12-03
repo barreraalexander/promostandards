@@ -108,10 +108,10 @@ class LocationDecoration(Base):
     
 
 
-class AvailableCharges(Base):
+class AvailableCharge(Base):
     __tablename__ = 'available_charges'
 
-    charged_id = Column(Integer, primary_key=True, nullable=False)
+    charge_id = Column(Integer, primary_key=True, nullable=False)
     charge_name = Column(String, nullable=False)
     charge_type = Column(String, nullable=False)
     charge_description = Column(String, nullable=False)
