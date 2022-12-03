@@ -15,7 +15,6 @@ class InventoryOperations:
             'id': request_dict['id']['#text'],
             'password': request_dict['password']['#text'],
             'product_id': request_dict['productId']['#text'],
-            # 'filter': request_dict.get('Filter')
             'filter': schemas.Filter(
                 part_id_array=request_dict['Filter']['partIdArray']['partId'],
                 label_size_array=request_dict['Filter']['LabelSizeArray']['labelSize'],

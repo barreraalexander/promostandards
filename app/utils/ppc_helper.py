@@ -57,7 +57,6 @@ class PPCOperations:
             xml = b''
             media_content = db_session.query(models.MediaContent).all()
             for content in media_content:
-                # xml_part = getAvailableLocationsResponse(media_content)
                 xml_part = getDecorationColor(media_content)
                 xml+= xml_part
             
