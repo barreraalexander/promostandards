@@ -476,6 +476,9 @@ class PPC_getAvailableLocationsResponse(PPC):
 class PPC_getDecorationColorsRequest(PPC):
     product_id: Optional[str]
     decoration_id: Optional[int]
+    
+
+    
 
 class PPC_getDecorationColorsResponse():
     decoration_colors: List[Color]

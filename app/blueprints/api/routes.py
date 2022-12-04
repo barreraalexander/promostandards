@@ -1,5 +1,5 @@
 import xmltodict
-from flask import Blueprint, request, Response
+from flask import Blueprint, request, Response, abort
 
 from app.utils.product_data_helper import ProductDataOperations
 from app.utils.inventory_helper import InventoryOperations
@@ -7,6 +7,8 @@ from app.utils.media_content_helper import MediaContentOperations
 from app.utils.ppc_helper import PPCOperations
 
 from app.config import settings
+
+from app.blueprints.errors.handlers import CustomXMLError
 
 router = Blueprint('api', __name__, url_prefix='/api')
 
@@ -42,7 +44,7 @@ def products():
         return response
 
     # check docs for what to do about total errors 
-    return 'error'
+    raise CustomXMLError(999)
 
 
 
@@ -103,7 +105,10 @@ def media_content():
 def ppc():
     request_xml =  request.data
 
-    xml_dict = xmltodict.parse(request_xml)
+    try:
+        xml_dict = xmltodict.parse(request_xml)
+    except Exception as e:
+        raise CustomXMLError(999)
 
     for elem in xml_dict:
         action_type = elem
@@ -128,4 +133,5 @@ def ppc():
         response = Response(response_xml, content_type='text/xml')
         return response
 
-    return 'error'
+    # abort(404, description='yiks')
+    raise CustomXMLError(999)

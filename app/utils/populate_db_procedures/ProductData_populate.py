@@ -235,7 +235,6 @@ def populate(count=25):
         new_model.fob_point_array =  json.dumps(new_model.fob_point_array, default=str)
         
         db_session.add(new_model)
-        # print (new_model)
 
     db_session.commit()
 

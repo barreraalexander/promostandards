@@ -1,5 +1,6 @@
 from app import schemas, models
 from app.database import get_session
+from flask import abort
 
 from app.utils.xml_response_templates.PPC_getAvailableLocationsResponse import xml_response as getAvailableLocationsResponse
 from app.utils.xml_response_templates.PPC_getFobPointsResponse import xml_response as getFobPoints
@@ -7,7 +8,12 @@ from app.utils.xml_response_templates.PPC_getAvailableCharges import xml_respons
 from app.utils.xml_response_templates.PPC_getConfigurationAndPricing import xml_response as getConfigurationAndPricing
 from app.utils.xml_response_templates.PPC_getDecorationColorResponse import xml_response as getDecorationColor
 
+from app.blueprints.errors.handlers import CustomXMLError
+
+from pydantic import ValidationError
+
 import xmltodict
+import json
 
 class PPCOperations:
     @staticmethod
@@ -24,9 +30,7 @@ class PPCOperations:
         })
 
         db_session = get_session()
-        # locations = db_session.query(models.AvailableLocation).filter(models.AvailableLocation.location_id==request_schema.product_id).first()
         locations = db_session.query(models.AvailableLocation).all()
-        print (locations)
         if (not locations):
             return False
 
@@ -40,20 +44,30 @@ class PPCOperations:
     def getDecorationColors(xml_dict):
 
         request_dict = (xml_dict['GetDecorationColorsRequest'])
-        request_schema = schemas.PPC_getDecorationColorsRequest(**{
-            'ws_version': request_dict['wsVersion'].get['#text'],
-            'id': request_dict['id'].get['#text'],
-            'password': request_dict['password'].get['#text'],
-            'location_id': request_dict['locationId'].get['#text'],
-            'product_id': request_dict['productId'].get('#text'),
-            'decoration_id': request_dict.get('decorationId').get('#text'),
-            'localization_country': request_dict.get('localizationCountry').get('#text'),
-            'localization_language': request_dict.get('localizationLanguage').get('#text'),
-        })
+        try:                
+            request_schema = schemas.PPC_getDecorationColorsRequest(**{
+                'ws_version': request_dict.get('wsVersion').get('#text'),
+                'id': request_dict.get('id').get('#text'),
+                'password': request_dict.get('password').get('#text'),
+                'location_id': request_dict.get('locationId').get('#text'),
+                'product_id': request_dict.get('productId').get('#text'),
+                'decoration_id': request_dict.get('decorationId').get('#text'),
+                'localization_country': request_dict.get('localizationCountry').get('#text'),
+                'localization_language': request_dict.get('localizationLanguage').get('#text'),
+            })
+        except ValidationError as e:
+            loc = e.json()
+            raise CustomXMLError(999, custom_description=loc)
+
+        except Exception as e:
+            raise CustomXMLError(999)
 
         db_session = get_session()
         if (request_schema.product_id):
             decoration_color = db_session.query(models.DecorationColor).filter(models.DecorationColor.product_id==request_schema.product_id).first()
+            if (not decoration_color):
+                raise CustomXMLError(custom_code=999)
+
             xml = getDecorationColor([decoration_color])
         else:
             decoration_colors = db_session.query(models.DecorationColor).all()
