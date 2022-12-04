@@ -3,7 +3,7 @@ import xmltodict
 def test_getInventoryLevels_error(client):
     res = client.get('/api/inventory')
 
-    assert res.status_code == 500
+    assert res.status_code == 999
 
 def test_getInventoryLevels_successful(client):
     request_dict = {'GetInventoryLevelsRequest': {'@xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance', '@xmlns': 'http://www.promostandards.org/WSDL/Inventory/2.0.0/', 'wsVersion': {'@xmlns': 'http://www.promostandards.org/WSDL/Inventory/2.0.0/SharedObjects/', '#text': '2.0.0'}, 'id': {'@xmlns': 'http://www.promostandards.org/WSDL/Inventory/2.0.0/SharedObjects/', '#text': 'id1'}, 'password': {'@xmlns': 'http://www.promostandards.org/WSDL/Inventory/2.0.0/SharedObjects/', '#text': 'password1'}, 'productId': {'@xmlns': 'http://www.promostandards.org/WSDL/Inventory/2.0.0/SharedObjects/', '#text': 'Token1'}, 'Filter': {'@xmlns': 'http://www.promostandards.org/WSDL/Inventory/2.0.0/SharedObjects/', 'partIdArray': {'partId': ['partId1', 'partId2']}, 'LabelSizeArray': {'labelSize': ['2XL', '2XS']}, 'PartColorArray': {'partColor': ['partColor1', 'partColor2']}}}}
@@ -17,7 +17,7 @@ def test_getInventoryLevels_successful(client):
 def test_getFilterValues_error(client):
     res = client.get('/api/inventory')
     
-    assert res.status_code == 500
+    assert res.status_code == 999
 
 def test_getFilterValues_successful(client):
     request_dict = {'GetInventoryLevelsRequest': {'@xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance', '@xmlns': 'http://www.promostandards.org/WSDL/Inventory/2.0.0/', 'wsVersion': {'@xmlns': 'http://www.promostandards.org/WSDL/Inventory/2.0.0/SharedObjects/', '#text': '2.0.0'}, 'id': {'@xmlns': 'http://www.promostandards.org/WSDL/Inventory/2.0.0/SharedObjects/', '#text': 'id1'}, 'password': {'@xmlns': 'http://www.promostandards.org/WSDL/Inventory/2.0.0/SharedObjects/', '#text': 'password1'}, 'productId': {'@xmlns': 'http://www.promostandards.org/WSDL/Inventory/2.0.0/SharedObjects/', '#text': 'Token1'}, 'Filter': {'@xmlns': 'http://www.promostandards.org/WSDL/Inventory/2.0.0/SharedObjects/', 'partIdArray': {'partId': ['partId1', 'partId2']}, 'LabelSizeArray': {'labelSize': ['2XL', '2XS']}, 'PartColorArray': {'partColor': ['partColor1', 'partColor2']}}}}

@@ -19,8 +19,10 @@ def products():
     request_xml =  request.data
 
     #convert the xml to a python dict
-    xml_dict = xmltodict.parse(request_xml)
-
+    try:
+        xml_dict = xmltodict.parse(request_xml)
+    except Exception as e:
+        raise CustomXMLError(999)
     # get the action type
     for elem in xml_dict:
         action_type = elem
@@ -52,8 +54,11 @@ def products():
 def inventory():
     request_xml =  request.data
 
-    xml_dict = xmltodict.parse(request_xml)
-    
+    try:
+        xml_dict = xmltodict.parse(request_xml)
+    except Exception as e:
+        raise CustomXMLError(999)
+
     for elem in xml_dict:
         action_type = elem
 
