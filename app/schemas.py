@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, validator, ValidationError
 from typing import Optional, List
 from datetime import datetime
 
@@ -455,12 +455,17 @@ class Inventory:
 
 
 class PPCBase(BaseModel):
-    ws_version: str
+    ws_version: Optional[str]
     id: str
     password: Optional[str]
     product_id: str
     localization_country: str
     localization_language: str
+
+    @validator('ws_version')
+    def none_will_raise(cls, v):
+        if v == None:
+            raise ValueError('must exist')
 
 
 class PPC(PPCBase):
@@ -471,6 +476,8 @@ class PPC_getAvailableLocationsRequest(PPC):
     pass
 
 class PPC_getAvailableLocationsResponse(PPC):
+    # print ('instantiated')
+    
     available_location_array: List[Location]
 
 class PPC_getDecorationColorsRequest(PPC):

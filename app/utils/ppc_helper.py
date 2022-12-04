@@ -20,14 +20,20 @@ class PPCOperations:
     def getAvailableLocations(xml_dict):
         request_dict = (xml_dict['GetAvailableLocationsRequest'])
 
-        request_schema = schemas.PPC_getAvailableLocationsRequest(**{
-            'ws_version': request_dict['wsVersion']['#text'],
-            'id': request_dict['id']['#text'],
-            'password': request_dict['password']['#text'],
-            'product_id': request_dict['productId']['#text'],
-            'localization_country': request_dict.get('localizationCountry').get('#text'),
-            'localization_language': request_dict.get('localizationLanguage').get('#text')
-        })
+        try:
+        
+            request_schema = schemas.PPC_getAvailableLocationsRequest(**{
+                'ws_version': request_dict.get('wsVersion').get('#text'),
+                'id': request_dict.get('id').get('#text'),
+                'password': request_dict['password']['#text'],
+                'product_id': request_dict.get('productId').get('#text'),
+                'localization_country': request_dict.get('localizationCountry').get('#text'),
+                'localization_language': request_dict.get('localizationLanguage').get('#text')
+            })
+
+        except Exception as e:
+            raise CustomXMLError(custom_code=999)
+                
 
         db_session = get_session()
         locations = db_session.query(models.AvailableLocation).all()
@@ -57,7 +63,7 @@ class PPCOperations:
             })
         except ValidationError as e:
             loc = e.json()
-            raise CustomXMLError(999, custom_description=loc)
+            raise CustomXMLError(120, custom_description=loc)
 
         except Exception as e:
             raise CustomXMLError(999)
@@ -66,14 +72,14 @@ class PPCOperations:
         if (request_schema.product_id):
             decoration_color = db_session.query(models.DecorationColor).filter(models.DecorationColor.product_id==request_schema.product_id).first()
             if (not decoration_color):
-                raise CustomXMLError(custom_code=999)
+                raise CustomXMLError(custom_code=160)
 
             xml = getDecorationColor([decoration_color])
         else:
             decoration_colors = db_session.query(models.DecorationColor).all()
             xml = getDecorationColor(decoration_colors)
         if (not xml):
-            return False
+                raise CustomXMLError(custom_code=160)
 
 
         return xml
@@ -82,15 +88,20 @@ class PPCOperations:
     def getFobPoints(xml_dict):
         request_dict = (xml_dict['GetFobPointsRequest'])
 
-        request_schema = schemas.PPC_getFobPointsRequest(**{
-            'ws_version': request_dict['wsVersion']['#text'],
-            'id': request_dict['id']['#text'],
-            'password': request_dict['password']['#text'],
-            'product_id': request_dict['productId']['#text'],
-            'localization_country': request_dict.get('localizationCountry').get('#text'),
-            'localization_language': request_dict.get('localizationLanguage').get('#text')
-        })
+        try:
+        
+            request_schema = schemas.PPC_getAvailableLocationsRequest(**{
+                'ws_version': request_dict.get('wsVersion').get('#text'),
+                'id': request_dict.get('id').get('#text'),
+                'password': request_dict['password']['#text'],
+                'product_id': request_dict.get('productId').get('#text'),
+                'localization_country': request_dict.get('localizationCountry').get('#text'),
+                'localization_language': request_dict.get('localizationLanguage').get('#text')
+            })
 
+        except Exception as e:
+            raise CustomXMLError(custom_code=999)
+                
         db_session = get_session()
         fob_data = db_session.query(models.FobPoint).filter(models.FobPoint.fob_id==request_schema.product_id).first()
         if (not fob_data):
@@ -104,15 +115,20 @@ class PPCOperations:
     def getAvailableCharges(xml_dict):
         request_dict = (xml_dict['GetAvailableChargesRequest'])
 
-        request_schema = schemas.PPC_getAvailableChargesRequest(**{
-            'ws_version': request_dict['wsVersion']['#text'],
-            'id': request_dict['id']['#text'],
-            'password': request_dict['password']['#text'],
-            'product_id': request_dict['productId']['#text'],
-            'localization_country': request_dict.get('localizationCountry').get('#text'),
-            'localization_language': request_dict.get('localizationLanguage').get('#text')
-        })
+        try:
+        
+            request_schema = schemas.PPC_getAvailableLocationsRequest(**{
+                'ws_version': request_dict.get('wsVersion').get('#text'),
+                'id': request_dict.get('id').get('#text'),
+                'password': request_dict['password']['#text'],
+                'product_id': request_dict.get('productId').get('#text'),
+                'localization_country': request_dict.get('localizationCountry').get('#text'),
+                'localization_language': request_dict.get('localizationLanguage').get('#text')
+            })
 
+        except Exception as e:
+            raise CustomXMLError(custom_code=999)
+                
         db_session = get_session()
         available_charge = db_session.query(models.AvailableCharge).all()
         # available_charge = db_session.query(models.AvailableCharge).filter(models.AvailableCharge)first()

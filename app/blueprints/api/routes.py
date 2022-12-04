@@ -44,7 +44,7 @@ def products():
         return response
 
     # check docs for what to do about total errors 
-    raise CustomXMLError(999)
+    raise CustomXMLError(160)
 
 
 
@@ -65,19 +65,23 @@ def inventory():
 
     if (response_xml):
         response = Response(response_xml, mimetype='text/xml')
-
         return response
 
-    response = Response(status=500)
-    return response                                                                                                                       
+
+    raise CustomXMLError(160)
+                                                                                                                       
 
 
 @router.route('/media_content')
 def media_content():
-
     request_xml =  request.data
 
-    xml_dict = xmltodict.parse(request_xml)
+    try:
+        xml_dict = xmltodict.parse(request_xml)
+    except Exception as e:
+        raise CustomXMLError(999)
+
+    # xml_dict = xmltodict.parse(request_xml)
 
     for elem in xml_dict:
         action_type = elem
@@ -98,7 +102,7 @@ def media_content():
         response = Response(response_xml, content_type='text/xml')
         return response
 
-    return 'error'                                                                                                                                
+    raise CustomXMLError(160)
 
 
 @router.route('/ppc')
@@ -114,6 +118,7 @@ def ppc():
         action_type = elem
 
     response_xml = False
+    
     if action_type=='GetAvailableLocationsRequest':
         response_xml = PPCOperations.getAvailableLocations(xml_dict)
 
@@ -134,4 +139,5 @@ def ppc():
         return response
 
     # abort(404, description='yiks')
-    raise CustomXMLError(999)
+    # raise CustomXMLError(999)
+    raise CustomXMLError(160)
