@@ -1,6 +1,18 @@
+from passlib.context import CryptContext
 def unpack_elems(elements):
     return " ".join(elements)
 
+
+pwd_context = CryptContext(schemes=['bcrypt'], deprecated="auto")
+
+def hash(password: str):
+    return pwd_context.hash(password)
+
+def verify(plain_password, hashed_password):
+    return pwd_context.verify(plain_password, hashed_password)
+
+
+# COMMON LINKS FOR INVENTORY ITEMS
 COMMON_XSI = "http://www.w3.org/2001/XMLSchema-instance"
 
 PPC_COMMON_XMLNS = 'http://www.promostandards.org/WSDL/PricingAndConfiguration/1.0.0/'
