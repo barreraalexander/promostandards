@@ -5,15 +5,7 @@ from app import create_app
 @pytest.fixture()
 def app():
     app = create_app()
-    # app.config.update({
-    #     "TESTING": True,
-    # })
-
-    # other setup can go here
-
     yield app
-
-    # clean up / reset resources here
 
 
 @pytest.fixture()
@@ -21,33 +13,16 @@ def client(app):
     return app.test_client()
 
 
-@pytest.fixture()
-def runner(app):
-    return app.test_cli_runner()
+@pytest.fixture
+def test_user(client):
+    user_data = {
+        "username" : f"test@gmail.com",
+        "password" : "password123"
+    }
+    res = client.post("/auth/register", json=user_data)
+    
+    assert res.status_code == 201
 
-# @pytest.fixture()
-# def client():
-#     app = create_app()
-#     # app.config.update({"TESTING" : True})
-#     return app.test_client()
-
-# @pytest.fixture()
-# def client():
-#     app = create_app()
-#     yield app.test_client()
-
-
-# @pytest.fixture()
-# def client():
-#     app = create_app()
-#     app.testing = True
-#     yield app.test_client()
-
-
-
-# @pytest.fixture()
-# def client():
-#     app = create_app
-#     app.testing = True
-#     yield app.test_client()
-
+    new_user = res.json
+    new_user['password'] = user_data['password']
+    return new_user

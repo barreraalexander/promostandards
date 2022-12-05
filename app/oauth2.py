@@ -2,10 +2,11 @@ from jose import JWTError, jwt
 from datetime import datetime, timedelta
 from app import schemas, database, models
 from app.config import settings
-# from fastapi import Depends, status, HTTPException
-# from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
+from functools import wraps
+from app.blueprints.errors.handlers import CustomXMLError
 
+# oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
 SECRET_KEY = settings.secret_key
 ALGORITHM = settings.algorithm
@@ -36,6 +37,33 @@ def verify_access_token(token: str, credentials_exception):
         raise credentials_exception
 
     return token_data
+
+
+def auth_required(router):
+    @wraps(router)
+    def authorize_cookie(**kwargs):
+        auth_token = kwargs['request'].cookies.get('Authorization')
+        if (auth_token):
+            token_type, jwt_token = auth_token.split(' ')
+            verify_access_token(jwt_token, CustomXMLError(110), detail="Invalid Credentials")
+            return router(**kwargs)
+        raise CustomXMLError(110)
+    return authorize_cookie
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(database.get_db)):
 #     credentials_exception = HTTPException(

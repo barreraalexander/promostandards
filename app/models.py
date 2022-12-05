@@ -8,7 +8,7 @@ from sqlalchemy.sql.sqltypes import TIMESTAMP
 class User(Base):
     __tablename__ = 'users'
 
-    id = Column(String, primary_key=True, nullable=False)
+    id = Column(Integer, primary_key=True, nullable=False)
     username = Column(String, nullable=False, unique=True)
     password = Column(String, nullable=False)
 

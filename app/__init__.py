@@ -8,6 +8,7 @@ from app.utils.populate_db_procedures.MediaContent_populate import populate as p
 from app.utils.populate_db_procedures.PPC_populate import populate as populate_ppc
 from app.utils.populate_db_procedures.Inventory_populate import populate as populate_inventory
 
+
 def create_app(config_class=settings):
     models.Base.metadata.create_all(bind=engine)
 
@@ -15,7 +16,9 @@ def create_app(config_class=settings):
     app.config.from_object(config_class)
 
     from app.blueprints.api.routes import router as api_router
+    from app.blueprints.auth.routes import router as auth_router
     app.register_blueprint(api_router)
+    app.register_blueprint(auth_router)
 
 
     if (settings.debug):
