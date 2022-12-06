@@ -132,5 +132,5 @@ def xml_response(media_content):
     test_xml = xmltodict.unparse(test_root)
 
     print (test_xml)
-    # return xml
-    return test_xml
+    return xml
+    # return test_xml
