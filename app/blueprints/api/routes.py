@@ -61,7 +61,8 @@ def inventory():
 
     for elem in xml_dict:
         action_type = elem
-
+    
+    response_xml = False
     if action_type=='GetInventoryLevelsRequest':
         response_xml = InventoryOperations.getInventoryLevels(xml_dict)
 
@@ -91,6 +92,7 @@ def media_content():
     for elem in xml_dict:
         action_type = elem
 
+    response_xml = False
     if action_type=='GetMediaContentRequest':
         response_xml = MediaContentOperations.getMediaContent(xml_dict)
         # if response_xml:
@@ -123,7 +125,6 @@ def ppc():
         action_type = elem
 
     response_xml = False
-    
     if action_type=='GetAvailableLocationsRequest':
         response_xml = PPCOperations.getAvailableLocations(xml_dict)
 
