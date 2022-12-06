@@ -82,6 +82,9 @@ def inventory():
 def media_content():
     request_xml =  request.data
 
+    print ('here')
+    print (request_xml)
+
     try:
         xml_dict = xmltodict.parse(request_xml)
     except Exception as e:
@@ -95,15 +98,9 @@ def media_content():
     response_xml = False
     if action_type=='GetMediaContentRequest':
         response_xml = MediaContentOperations.getMediaContent(xml_dict)
-        # if response_xml:
-            # response = Response(response_xml, mimetype='text/xml')
-            # return response
 
     if action_type=='GetMediaDateModifiedRequest':
         response_xml = MediaContentOperations.getMediaDateModified(xml_dict)
-        # if response_xml:
-            # response = Response(response_xml, mimetype='text/xml')
-            # return response
 
     if (response_xml):
         response = Response(response_xml, content_type='text/xml')

@@ -4,15 +4,24 @@ from typing import List
 import json
 import xmltodict
 
-def xml_response(media_content):
+from app.utils.helpers import MEDIACONTENT_COMMON_SHARED_OBJECT, MEDIACONTENT_COMMON_XMLNS, COMMON_XSI
 
-    root = etree.Element('MediaContent', xsi="http://www.w3.org/2001/XMLSchema-instance", xmlns="http://www.promostandards.org/WSDL/MediaService/1.0.0/")
+def xml_response(media_content):
+    attr_qname = etree.QName(COMMON_XSI, "schemaLocation")
+
+    # root = etree.Element('MediaContent', xsi=COMMON_XSI, xmlns=MEDIACONTENT_COMMON_XMLNS)
+    root = etree.Element('MediaContent',
+        xmlns=MEDIACONTENT_COMMON_XMLNS,
+        nsmap={
+            'xsi':  COMMON_XSI,
+        }    
+    )
     
-    productId = etree.Element('productId', xmlns="http://www.promostandards.org/WSDL/MediaService/1.0.0/SharedObjects/")
+    productId = etree.Element('productId', xmlns=MEDIACONTENT_COMMON_SHARED_OBJECT)
     productId.text = media_content.product_id
     root.append(productId)
     
-    partID = etree.Element('partID', xmlns="http://www.promostandards.org/WSDL/MediaService/1.0.0/SharedObjects/")
+    partID = etree.Element('partID', xmlns=MEDIACONTENT_COMMON_SHARED_OBJECT)
     partID.text = media_content.part_id
     root.append(partID)
     
@@ -21,7 +30,7 @@ def xml_response(media_content):
     root.append(url)
 
 
-    mediaType = etree.Element('mediaType', xmlns="http://www.promostandards.org/WSDL/MediaService/1.0.0/SharedObjects/")
+    mediaType = etree.Element('mediaType', xmlns=MEDIACONTENT_COMMON_SHARED_OBJECT)
     mediaType.text = media_content.media_type
     root.append(mediaType)
 
