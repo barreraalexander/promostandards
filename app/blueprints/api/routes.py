@@ -13,7 +13,7 @@ from app.blueprints.errors.handlers import CustomXMLError
 router = Blueprint('api', __name__, url_prefix='/api')
 
 
-@router.route('/product_data')
+@router.route('/product_data', methods=['POST', 'GET', 'PUT'])
 def products():
 
     request_xml =  request.data
@@ -50,7 +50,7 @@ def products():
 
 
 
-@router.route('/inventory')
+@router.route('/inventory', methods=['POST', 'GET', 'PUT'])
 def inventory():
     request_xml =  request.data
 
@@ -77,7 +77,7 @@ def inventory():
                                                                                                                        
 
 
-@router.route('/media_content')
+@router.route('/media_content', methods=['POST', 'GET', 'PUT'])
 def media_content():
     request_xml =  request.data
 
@@ -93,15 +93,15 @@ def media_content():
 
     if action_type=='GetMediaContentRequest':
         response_xml = MediaContentOperations.getMediaContent(xml_dict)
-        if response_xml:
-            response = Response(response_xml, mimetype='text/xml')
-            return response
+        # if response_xml:
+            # response = Response(response_xml, mimetype='text/xml')
+            # return response
 
     if action_type=='GetMediaDateModifiedRequest':
         response_xml = MediaContentOperations.getMediaDateModified(xml_dict)
-        if response_xml:
-            response = Response(response_xml, mimetype='text/xml')
-            return response
+        # if response_xml:
+            # response = Response(response_xml, mimetype='text/xml')
+            # return response
 
     if (response_xml):
         response = Response(response_xml, content_type='text/xml')
@@ -110,7 +110,7 @@ def media_content():
     raise CustomXMLError(160)
 
 
-@router.route('/ppc')
+@router.route('/ppc', methods=['POST', 'GET', 'PUT'])
 def ppc():
     request_xml =  request.data
 
