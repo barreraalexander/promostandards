@@ -13,6 +13,42 @@ from app.blueprints.errors.handlers import CustomXMLError
 router = Blueprint('api', __name__, url_prefix='/api')
 
 
+@router.route('/test_soap_request', methods=['POST', 'GET', 'PUT'])
+def test_soap_request():
+    request_xml =  request.data
+
+    print('\n\n')
+    print ('REQUEST XML')
+    print (request_xml)
+    print('\n\n')
+
+    try:
+        xml_dict = xmltodict.parse(request_xml)
+    except Exception as e:
+        print (e)
+        raise CustomXMLError(999)
+
+    print('\n\n')
+    print ('REQUEST DICT')
+    print (xml_dict)
+    print('\n\n')
+    
+    # xml_dict = xmltodict.parse(request_xml)
+
+
+
+    return request_xml
+
+@router.route('/test_soap_response', methods=['POST', 'GET', 'PUT'])
+def test_soap_response():
+    response_dict = {'s:Envelope': {'@xmlns:s': 'http://schemas.xmlsoap.org/soap/envelope/', 's:Body': {'@xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance', '@xmlns:xsd': 'http://www.w3.org/2001/XMLSchema', 'GetMediaContentRequest': {'@xmlns': 'http://www.promostandards.org/WSDL/MediaService/1.0.0/', 'wsVersion': {'@xmlns': 'http://www.promostandards.org/WSDL/MediaService/1.0.0/SharedObjects/', '#text': 'Token1'}, 'id': {'@xmlns': 'http://www.promostandards.org/WSDL/MediaService/1.0.0/SharedObjects/', '#text': 'Token1'}, 'password': {'@xmlns': 'http://www.promostandards.org/WSDL/MediaService/1.0.0/SharedObjects/', '#text': 'Token1'}, 'cultureName': {'@xmlns': 'http://www.promostandards.org/WSDL/MediaService/1.0.0/SharedObjects/', '#text': 'cultureName1'}, 'mediaType': {'@xmlns': 'http://www.promostandards.org/WSDL/MediaService/1.0.0/SharedObjects/', '#text': 'Image'}, 'productId': {'@xmlns': 'http://www.promostandards.org/WSDL/MediaService/1.0.0/SharedObjects/', '#text': 'Token1'}, 'partId': {'@xmlns': 'http://www.promostandards.org/WSDL/MediaService/1.0.0/SharedObjects/', '#text': 'Token1'}, 'classType': '1'}}}}
+    request_xml = xmltodict.unparse(response_dict)
+
+    response = Response(request_xml, content_type='text/xml', status=200)
+
+    # return request_xml
+    return response
+
 @router.route('/product_data', methods=['POST', 'GET', 'PUT'])
 def products():
 
@@ -82,10 +118,10 @@ def inventory():
 def media_content():
     request_xml =  request.data
 
-    print('\n\n')
-    print ('REQUEST XML')
-    print (request_xml)
-    print('\n\n')
+    # print('\n\n')
+    # print ('REQUEST XML')
+    # print (request_xml)
+    # print('\n\n')
 
     try:
         xml_dict = xmltodict.parse(request_xml)
@@ -93,10 +129,10 @@ def media_content():
         print (e)
         raise CustomXMLError(999)
 
-    print('\n\n')
-    print ('REQUEST DICT')
-    print (xml_dict)
-    print('\n\n')
+    # print('\n\n')
+    # print ('REQUEST DICT')
+    # print (xml_dict)
+    # print('\n\n')
     
     # xml_dict = xmltodict.parse(request_xml)
 
