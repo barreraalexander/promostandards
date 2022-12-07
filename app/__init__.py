@@ -28,9 +28,9 @@ def create_app(config_class=settings):
         models.Base.metadata.drop_all(bind=engine)
         models.Base.metadata.create_all(bind=engine)
 
-        populate_productdata(count=100)
+        # populate_productdata(count=100)
         populate_mediacontent(count=50)
-        populate_inventory(count=100)
-        populate_ppc(count=50)
+        # populate_inventory(count=100)
+        # populate_ppc(count=50)
 
     return app

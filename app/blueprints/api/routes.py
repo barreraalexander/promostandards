@@ -82,14 +82,22 @@ def inventory():
 def media_content():
     request_xml =  request.data
 
-    print ('here')
+    print('\n\n')
+    print ('REQUEST XML')
     print (request_xml)
+    print('\n\n')
 
     try:
         xml_dict = xmltodict.parse(request_xml)
     except Exception as e:
+        print (e)
         raise CustomXMLError(999)
 
+    print('\n\n')
+    print ('REQUEST DICT')
+    print (xml_dict)
+    print('\n\n')
+    
     # xml_dict = xmltodict.parse(request_xml)
 
     for elem in xml_dict:

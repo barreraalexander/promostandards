@@ -24,5 +24,6 @@ PRODUCTDATA_COMMON_SHARED_OBJECT = 'http://www.promostandards.org/WSDL/ProductDa
 INVENTORY_COMMON_XMLNS = 'http://www.promostandards.org/WSDL/PricingAndConfiguration/1.0.0/'
 INVENTORY_COMMON_SHARED_OBJECT = 'http://www.promostandards.org/WSDL/ProductDataService/2.0.0/SharedObjects/'
 
+
 MEDIACONTENT_COMMON_XMLNS = 'http://www.promostandards.org/WSDL/PricingAndConfiguration/1.0.0/'
 MEDIACONTENT_COMMON_SHARED_OBJECT = 'http://www.promostandards.org/WSDL/ProductDataService/2.0.0/SharedObjects/'
