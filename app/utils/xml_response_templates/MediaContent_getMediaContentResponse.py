@@ -7,6 +7,8 @@ import xmltodict
 from app.utils.helpers import MEDIACONTENT_COMMON_SHARED_OBJECT, MEDIACONTENT_COMMON_XMLNS, COMMON_XSI
 
 def xml_response(media_content):
+
+    print (media_content)
     attr_qname = etree.QName(COMMON_XSI, "schemaLocation")
 
     # root = etree.Element('MediaContent', xsi=COMMON_XSI, xmlns=MEDIACONTENT_COMMON_XMLNS)

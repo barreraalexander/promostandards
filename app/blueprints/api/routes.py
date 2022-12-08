@@ -17,6 +17,8 @@ router = Blueprint('api', __name__, url_prefix='/api')
 def test_soap_request():
     request_xml =  request.data
 
+
+
     print('\n\n')
     print ('REQUEST XML')
     print (request_xml)
@@ -42,7 +44,10 @@ def test_soap_request():
 @router.route('/test_soap_response', methods=['POST', 'GET', 'PUT'])
 def test_soap_response():
     response_dict = {'s:Envelope': {'@xmlns:s': 'http://schemas.xmlsoap.org/soap/envelope/', 's:Body': {'@xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance', '@xmlns:xsd': 'http://www.w3.org/2001/XMLSchema', 'GetMediaContentRequest': {'@xmlns': 'http://www.promostandards.org/WSDL/MediaService/1.0.0/', 'wsVersion': {'@xmlns': 'http://www.promostandards.org/WSDL/MediaService/1.0.0/SharedObjects/', '#text': 'Token1'}, 'id': {'@xmlns': 'http://www.promostandards.org/WSDL/MediaService/1.0.0/SharedObjects/', '#text': 'Token1'}, 'password': {'@xmlns': 'http://www.promostandards.org/WSDL/MediaService/1.0.0/SharedObjects/', '#text': 'Token1'}, 'cultureName': {'@xmlns': 'http://www.promostandards.org/WSDL/MediaService/1.0.0/SharedObjects/', '#text': 'cultureName1'}, 'mediaType': {'@xmlns': 'http://www.promostandards.org/WSDL/MediaService/1.0.0/SharedObjects/', '#text': 'Image'}, 'productId': {'@xmlns': 'http://www.promostandards.org/WSDL/MediaService/1.0.0/SharedObjects/', '#text': 'Token1'}, 'partId': {'@xmlns': 'http://www.promostandards.org/WSDL/MediaService/1.0.0/SharedObjects/', '#text': 'Token1'}, 'classType': '1'}}}}
+    
+    
     request_xml = xmltodict.unparse(response_dict)
+
 
     
 
@@ -62,9 +67,14 @@ def products():
     except Exception as e:
         raise CustomXMLError(999)
     # get the action type
-    for elem in xml_dict:
-        action_type = elem
+    # for elem in xml_dict:
+    #     action_type = elem
 
+    print ('\n\n')
+    print (xml_dict)
+    print ('\n\n')
+
+    action_type = ''
     response_xml = False
     # run the particular action 
     if action_type=='GetProductRequest':
@@ -120,30 +130,24 @@ def inventory():
 def media_content():
     request_xml =  request.data
 
-    # print('\n\n')
-    # print ('REQUEST XML')
-    # print (request_xml)
-    # print('\n\n')
-
+    action_type = ''
     try:
         xml_dict = xmltodict.parse(request_xml)
+        xml_body = xml_dict.get('s:Envelope').get('s:Body')
+        for key in xml_body:
+            if key[0] != '@':
+                action_type = key
+        xml_body_content = xml_body[action_type]
+        # print (xml_body_content)
     except Exception as e:
         print (e)
         raise CustomXMLError(999)
 
-    # print('\n\n')
-    # print ('REQUEST DICT')
-    # print (xml_dict)
-    # print('\n\n')
-    
-    # xml_dict = xmltodict.parse(request_xml)
-
-    for elem in xml_dict:
-        action_type = elem
-
     response_xml = False
+    print (action_type)
     if action_type=='GetMediaContentRequest':
-        response_xml = MediaContentOperations.getMediaContent(xml_dict)
+        # response_xml = MediaContentOperations.getMediaContent(xml_dict)
+        response_xml = MediaContentOperations.getMediaContent(xml_body_content)
 
     if action_type=='GetMediaDateModifiedRequest':
         response_xml = MediaContentOperations.getMediaDateModified(xml_dict)

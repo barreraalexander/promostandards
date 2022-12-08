@@ -9,7 +9,12 @@ from typing import List
 class MediaContentOperations:
     @staticmethod
     def getMediaContent(xml_dict):
-        request_dict = (xml_dict['GetMediaContentRequest'])
+        # print ('\n\n')
+        # print (xml_dict)
+        # print ('\n\n')
+        # return ''
+        # request_dict = (xml_dict['GetMediaContentRequest'])
+        request_dict = xml_dict
         try:                
             request_schema = schemas.MediaContent_getMediaContentRequest(**{
                 'ws_version': request_dict['wsVersion']['#text'],
