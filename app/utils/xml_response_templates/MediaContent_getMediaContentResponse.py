@@ -4,19 +4,35 @@ from typing import List
 import json
 import xmltodict
 
-from app.utils.helpers import MEDIACONTENT_COMMON_SHARED_OBJECT, MEDIACONTENT_COMMON_XMLNS, COMMON_XSI
+from app.utils.helpers import MEDIACONTENT_COMMON_SHARED_OBJECT, MEDIACONTENT_COMMON_XMLNS, COMMON_XSI, ENVELOPE_S_XMLNS, BODY_XSD, BODY_XSI
 
 def xml_response(media_content):
 
-    print (media_content)
+    envelope_nsmap = {
+        's':  ENVELOPE_S_XMLNS,
+    }
 
-    nsmap = {
+    body_nsmap = {
+        'xsi':  BODY_XSI,
+        'xsd': BODY_XSD
+    }
+
+    root_nsmap = {
         'xsi':  COMMON_XSI,
     }
 
+    envelope = etree.Element("{http://schemas.xmlsoap.org/soap/envelope}Envelope")
+    etree.register_namespace("s", "http://schemas.xmlsoap.org/soap/envelope")
+
+
+
+    body = etree.Element('{http://schemas.xmlsoap.org/soap/envelope}Body', nsmap=body_nsmap)
+    envelope.append(body)
+
+
     root = etree.Element('MediaContent',
         xmlns=MEDIACONTENT_COMMON_XMLNS,
-        nsmap=nsmap
+        nsmap=root_nsmap
     )
     
     
@@ -142,8 +158,14 @@ def xml_response(media_content):
 
     ChangeTimeStamp = etree.Element('ChangeTimeStamp')
     ChangeTimeStamp.text = str(media_content.change_time_stamp).lower()
-    root.append(ChangeTimeStamp)    
-    xml = etree.tostring(root, pretty_print=True)
+    root.append(ChangeTimeStamp)
+
+
+
+    body.append(root)
+
+
+    xml = etree.tostring(envelope, pretty_print=True)
 
     # test_root = {'GetMediaContentRequest': {'@xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance', '@xmlns': 'http://www.promostandards.org/WSDL/MediaService/1.0.0/', 'wsVersion': {'@xmlns': 'http://www.promostandards.org/WSDL/MediaService/1.0.0/SharedObjects/', '#text': 'Token1'}, 'id': {'@xmlns': 'http://www.promostandards.org/WSDL/MediaService/1.0.0/SharedObjects/', '#text': 'Token1'}, 'password': {'@xmlns': 'http://www.promostandards.org/WSDL/MediaService/1.0.0/SharedObjects/', '#text': 'Token1'}, 'cultureName': {'@xmlns': 'http://www.promostandards.org/WSDL/MediaService/1.0.0/SharedObjects/', '#text': 'cultureName1'}, 'mediaType': {'@xmlns': 'http://www.promostandards.org/WSDL/MediaService/1.0.0/SharedObjects/', '#text': 'Image'}, 'productId': {'@xmlns': 'http://www.promostandards.org/WSDL/MediaService/1.0.0/SharedObjects/', '#text': 'Token1'}, 'partId': {'@xmlns': 'http://www.promostandards.org/WSDL/MediaService/1.0.0/SharedObjects/', '#text': 'Token1'}, 'classType': '1'}}
     # test_xml = xmltodict.unparse(test_root)

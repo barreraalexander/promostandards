@@ -28,6 +28,6 @@ INVENTORY_COMMON_SHARED_OBJECT = 'http://www.promostandards.org/WSDL/Inventory/2
 MEDIACONTENT_COMMON_XMLNS = 'http://www.promostandards.org/WSDL/MediaService/1.0.0/'
 MEDIACONTENT_COMMON_SHARED_OBJECT = 'http://www.promostandards.org/WSDL/MediaService/1.0.0/SharedObjects/'
 
-ENVELOPE_XMLNS = "http://schemas.xmlsoap.org/soap/envelope/"
+ENVELOPE_S_XMLNS = "http://schemas.xmlsoap.org/soap/envelope/"
 BODY_XSI = "http://www.w3.org/2001/XMLSchema-instance"
 BODY_XSD = "http://www.w3.org/2001/XMLSchema"
