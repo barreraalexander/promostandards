@@ -21,12 +21,18 @@ def xml_response(media_content):
         'xsi':  COMMON_XSI,
     }
 
-    envelope = etree.Element("{http://schemas.xmlsoap.org/soap/envelope}Envelope")
-    etree.register_namespace("s", "http://schemas.xmlsoap.org/soap/envelope")
+
+    # envelope = etree.Element("{http://schemas.xmlsoap.org/soap/envelope}Envelope")
+    # etree.register_namespace("s", "http://schemas.xmlsoap.org/soap/envelope")
+
+
+    envelope = etree.Element("{http://www.w3.org/2003/05/soap-envelope}Envelope")
+    etree.register_namespace("s", "http://www.w3.org/2003/05/soap-envelope")
     # envelope.write(envelope, xml_declaration=True, encoding='  UTF-8')
 
 
-    body = etree.Element('{http://schemas.xmlsoap.org/soap/envelope}Body', nsmap=body_nsmap)
+    # body = etree.Element('{http://schemas.xmlsoap.org/soap/envelope}Body', nsmap=body_nsmap)
+    body = etree.Element('{http://www.w3.org/2003/05/soap-envelope}Body', nsmap=body_nsmap)
     envelope.append(body)
 
 
