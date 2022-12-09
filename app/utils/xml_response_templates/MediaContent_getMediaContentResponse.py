@@ -9,35 +9,12 @@ from app.utils.helpers import MEDIACONTENT_COMMON_SHARED_OBJECT, MEDIACONTENT_CO
 def xml_response(media_content):
 
     print (media_content)
-    # attr_qname = etree.QName(COMMON_XSI, "schemaLocation")
 
-    # root = etree.Element('MediaContent', xsi=COMMON_XSI, xmlns=MEDIACONTENT_COMMON_XMLNS)
-    
-    
-    
-    # sub_root = etree.SubElement(root, "{http://www.w3.org/2001/XMLSchema-instance}nil")
-    # sub_root = etree.SubElement(root, "{http://www.w3.org/1999/xhtml}body")
-    
-    # sub_sub_root = etree.SubElement(root, sub_root,  { "{http://www.w3.org/2001/XMLSchema-instance}nil" : "true" } )
-    # root
-
-
-    # print ((root.tag))
-    # root.xsinil.value = True
-
-
-    # NS = "true"
-    # etree.register_namespace("xsi", NS)
-    # root = etree.Element(etree.QName(NS, "nil"))
-    attr_qname = etree.QName("http://www.w3.org/2001/XMLSchema-instance", "nil")
     nsmap = {
         'xsi':  COMMON_XSI,
-        # 'nil': 'true'
     }
 
-
     root = etree.Element('MediaContent',
-        {attr_qname: "true"},
         xmlns=MEDIACONTENT_COMMON_XMLNS,
         nsmap=nsmap
     )
