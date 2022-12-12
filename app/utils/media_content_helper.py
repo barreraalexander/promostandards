@@ -8,13 +8,7 @@ from typing import List
 
 class MediaContentOperations:
     @staticmethod
-    def getMediaContent(xml_dict):
-        # print ('\n\n')
-        # print (xml_dict)
-        # print ('\n\n')
-        # return ''
-        # request_dict = (xml_dict['GetMediaContentRequest'])
-        request_dict = xml_dict
+    def getMediaContent(request_dict):
         try:                
             request_schema = schemas.MediaContent_getMediaContentRequest(**{
                 'ws_version': request_dict['wsVersion']['#text'],
@@ -45,7 +39,7 @@ class MediaContentOperations:
 
     @staticmethod
     def getMediaDateModified(xml_dict):
-        request_dict = (xml_dict['GetMediaDateModifiedRequest'])
+        request_dict = xml_dict
 
         # Beginning date time since last change in UTC
         try:                
@@ -69,10 +63,11 @@ class MediaContentOperations:
         if (not media_content):
             raise CustomXMLError(custom_code=160)
             
-        xml = b''
-        for content in media_content:
-            data = getDateModifiedResponse(content)            
-            xml += data
+        # xml = b''
+        # for content in media_content:
+        #     data = getDateModifiedResponse(content)            
+        #     xml += data
+        xml = getDateModifiedResponse(media_content)
             
 
         return xml

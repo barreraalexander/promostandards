@@ -31,3 +31,18 @@ MEDIACONTENT_COMMON_SHARED_OBJECT = 'http://www.promostandards.org/WSDL/MediaSer
 ENVELOPE_S_XMLNS = "http://schemas.xmlsoap.org/soap/envelope/"
 BODY_XSI = "http://www.w3.org/2001/XMLSchema-instance"
 BODY_XSD = "http://www.w3.org/2001/XMLSchema"
+
+
+
+ENVELOPE_NSMAP = {
+    's':  ENVELOPE_S_XMLNS,
+}
+
+BODY_NSMAP = {
+    'xsi':  BODY_XSI,
+    'xsd': BODY_XSD
+}
+
+ROOT_NSMAP = {
+    'xsi':  COMMON_XSI,
+}

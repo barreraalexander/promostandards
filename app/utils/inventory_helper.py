@@ -9,8 +9,7 @@ from pydantic import ValidationError
 
 class InventoryOperations:
     @staticmethod
-    def getInventoryLevels(xml_dict):
-        request_dict = (xml_dict['GetInventoryLevelsRequest'])
+    def getInventoryLevels(request_dict):
         try:                
             request_schema = schemas.Inventory_getInventoryLevelsRequest(**{
                 'ws_version': request_dict['wsVersion']['#text'],
@@ -41,8 +40,7 @@ class InventoryOperations:
 
 
     @staticmethod
-    def getFilterValues(xml_dict):
-        request_dict = (xml_dict['GetFilterValuesRequest'])
+    def getFilterValues(request_dict):
         try:                
             request_schema = schemas.Inventory_getFilterValuesRequest(**{
                 'ws_version': request_dict['wsVersion']['#text'],

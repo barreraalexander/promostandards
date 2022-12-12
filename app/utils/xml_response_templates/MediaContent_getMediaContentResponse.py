@@ -4,48 +4,24 @@ from typing import List
 import json
 import xmltodict
 
-from app.utils.helpers import MEDIACONTENT_COMMON_SHARED_OBJECT, MEDIACONTENT_COMMON_XMLNS, COMMON_XSI, ENVELOPE_S_XMLNS, BODY_XSD, BODY_XSI
+from app.utils.helpers import MEDIACONTENT_COMMON_SHARED_OBJECT, \
+    MEDIACONTENT_COMMON_XMLNS, \
+    BODY_NSMAP, ROOT_NSMAP
 
-def xml_response(media_content):
-
-    envelope_nsmap = {
-        's':  ENVELOPE_S_XMLNS,
-    }
-
-    body_nsmap = {
-        'xsi':  BODY_XSI,
-        'xsd': BODY_XSD
-    }
-
-    root_nsmap = {
-        'xsi':  COMMON_XSI,
-    }
-
-
-    # envelope = etree.Element("{http://schemas.xmlsoap.org/soap/envelope}Envelope")
-    # etree.register_namespace("s", "http://schemas.xmlsoap.org/soap/envelope")
-
+def xml_response(media_content: schemas.MediaContent):
 
     envelope = etree.Element("{http://www.w3.org/2003/05/soap-envelope}Envelope")
     etree.register_namespace("s", "http://www.w3.org/2003/05/soap-envelope")
-    # envelope.write(envelope, xml_declaration=True, encoding='  UTF-8')
+ 
 
-
-    # body = etree.Element('{http://schemas.xmlsoap.org/soap/envelope}Body', nsmap=body_nsmap)
-    body = etree.Element('{http://www.w3.org/2003/05/soap-envelope}Body', nsmap=body_nsmap)
+    body = etree.Element('{http://www.w3.org/2003/05/soap-envelope}Body', nsmap=BODY_NSMAP)
     envelope.append(body)
 
 
     root = etree.Element('MediaContent',
         xmlns=MEDIACONTENT_COMMON_XMLNS,
-        nsmap=root_nsmap
+        nsmap=ROOT_NSMAP
     )
-    
-    
-
-  
-    
-
 
     productId = etree.Element('productId', xmlns=MEDIACONTENT_COMMON_SHARED_OBJECT)
     productId.text = media_content.product_id
@@ -166,24 +142,9 @@ def xml_response(media_content):
     ChangeTimeStamp.text = str(media_content.change_time_stamp).lower()
     root.append(ChangeTimeStamp)
 
-
-
     body.append(root)
 
 
     xml = etree.tostring(envelope, pretty_print=True, encoding='UTF-8')
 
-    xml_dict = xmltodict.parse(xml)
-
-    xml = xmltodict.unparse(xml_dict)
-    
-
-
-
-
-    # test_root = {'GetMediaContentRequest': {'@xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance', '@xmlns': 'http://www.promostandards.org/WSDL/MediaService/1.0.0/', 'wsVersion': {'@xmlns': 'http://www.promostandards.org/WSDL/MediaService/1.0.0/SharedObjects/', '#text': 'Token1'}, 'id': {'@xmlns': 'http://www.promostandards.org/WSDL/MediaService/1.0.0/SharedObjects/', '#text': 'Token1'}, 'password': {'@xmlns': 'http://www.promostandards.org/WSDL/MediaService/1.0.0/SharedObjects/', '#text': 'Token1'}, 'cultureName': {'@xmlns': 'http://www.promostandards.org/WSDL/MediaService/1.0.0/SharedObjects/', '#text': 'cultureName1'}, 'mediaType': {'@xmlns': 'http://www.promostandards.org/WSDL/MediaService/1.0.0/SharedObjects/', '#text': 'Image'}, 'productId': {'@xmlns': 'http://www.promostandards.org/WSDL/MediaService/1.0.0/SharedObjects/', '#text': 'Token1'}, 'partId': {'@xmlns': 'http://www.promostandards.org/WSDL/MediaService/1.0.0/SharedObjects/', '#text': 'Token1'}, 'classType': '1'}}
-    # test_xml = xmltodict.unparse(test_root)
-
-    # print (test_xml)
     return xml
-    # return test_xml
