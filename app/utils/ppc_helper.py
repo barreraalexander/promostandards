@@ -90,7 +90,6 @@ class PPCOperations:
             loc = e.json()
             raise CustomXMLError(120, custom_description=loc)
         except Exception as e:
-            print (e)
             raise CustomXMLError(999)
 
         db_session = get_session()

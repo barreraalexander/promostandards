@@ -418,8 +418,7 @@ class ProductData_getProductSellableRequest(BaseModel):
     part_id: Optional[str]
     line_name: Optional[str]
     is_sellable: bool
-    # color_name: str
-    # apparel_size_array: List[ApparelSize]
+
 
 
 class MediaContentBase(BaseModel):
@@ -484,11 +483,6 @@ class PPCBase(BaseModel):
     localization_country: str
     localization_language: str
 
-    @validator('ws_version')
-    def none_will_raise(cls, v):
-        if v == None:
-            raise ValueError('must exist')
-
 
 class PPC(PPCBase):
     class Config:
@@ -497,18 +491,15 @@ class PPC(PPCBase):
 class PPC_getAvailableLocationsRequest(PPC):
     pass
 
-class PPC_getAvailableLocationsResponse(PPC):
-    # print ('instantiated')
-    
+class PPC_getAvailableLocationsResponse(PPC):    
     available_location_array: List[Location]
 
 class PPC_getDecorationColorsRequest(PPC):
     product_id: Optional[str]
+    location_id: Optional[str]
     decoration_id: Optional[int]
-    
 
     
-
 class PPC_getDecorationColorsResponse():
     decoration_colors: List[Color]
 

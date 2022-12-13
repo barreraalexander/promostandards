@@ -12,7 +12,7 @@ from app.blueprints.errors.handlers import CustomXMLError
 
 router = Blueprint('api', __name__, url_prefix='/api')
 
-@router.route('/product_data', methods=['POST', 'GET', 'PUT'])
+@router.route('/product_data', methods=['POST'])
 def products():
     request_xml =  request.data
 
@@ -50,7 +50,7 @@ def products():
 
 
 
-@router.route('/inventory', methods=['POST', 'GET', 'PUT'])
+@router.route('/inventory', methods=['POST'])
 def inventory():
     request_xml =  request.data
 
@@ -73,14 +73,14 @@ def inventory():
         response_xml = InventoryOperations.getFilterValues(xml_body_content)
 
     if (response_xml):
-        response = Response(response_xml, mimetype='text/xml')
+        response = Response(response_xml, content_type='text/xml')
         return response
 
     raise CustomXMLError(160)
                                                                                                                        
 
 
-@router.route('/media_content', methods=['POST', 'GET', 'PUT'])
+@router.route('/media_content', methods=['POST'])
 def media_content():
     request_xml =  request.data
 
@@ -96,9 +96,7 @@ def media_content():
         raise CustomXMLError(999)
 
     response_xml = False
-    print (action_type)
     if action_type=='GetMediaContentRequest':
-        # response_xml = MediaContentOperations.getMediaContent(xml_dict)
         response_xml = MediaContentOperations.getMediaContent(xml_body_content)
 
     if action_type=='GetMediaDateModifiedRequest':
@@ -111,7 +109,7 @@ def media_content():
     raise CustomXMLError(160)
 
 
-@router.route('/ppc', methods=['POST', 'GET', 'PUT'])
+@router.route('/ppc', methods=['POST'])
 def ppc():
     request_xml =  request.data
 
@@ -124,7 +122,6 @@ def ppc():
                 action_type = key
         xml_body_content = xml_body[action_type]
     except Exception as e:
-        print (e)
         raise CustomXMLError(999)
 
     response_xml = False

@@ -33,7 +33,6 @@ class InventoryOperations:
         if (not product_data):
             raise CustomXMLError(custom_code=160)
 
-
         xml = getInventoryLevels(product_data)
         return xml
 
