@@ -1,39 +1,46 @@
 from lxml import etree
 from app import schemas
-from typing import List
 import json
 
-from app.utils.helpers import PPC_COMMON_XMLNS, PPC_COMMON_SHARED_OBJECT, COMMON_XSI
+from app.utils.helpers import PRODUCTDATA_COMMON_SHARED_OBJECT, PRODUCTDATA_COMMON_XMLNS, BODY_NSMAP, ROOT_NSMAP
 
 
 def xml_response(product_data: schemas.ProductData):
-    xsi = 'http://www.w3.org/2001/XMLSchema-instance'
-    xmlns = 'http://www.promostandards.org/WSDL/ProductDataService/2.0.0/'
-    xmlns_shared_objects = 'http://www.promostandards.org/WSDL/ProductDataService/2.0.0/SharedObjects/'
+    envelope = etree.Element("{http://www.w3.org/2003/05/soap-envelope}Envelope")
+    etree.register_namespace("s", "http://www.w3.org/2003/05/soap-envelope")
+ 
+
+    body = etree.Element('{http://www.w3.org/2003/05/soap-envelope}Body', nsmap=BODY_NSMAP)
+    envelope.append(body)
+
+    root = etree.Element('Product',
+        xmlns=PRODUCTDATA_COMMON_XMLNS,
+        nsmap=ROOT_NSMAP
+    )
 
 
-    root = etree.Element('Product', xsi=xsi, xmlns=xmlns)
+    # root = etree.Element('Product', xsi=xsi, xmlns=xmlns)
 
-    ProductId = etree.Element('ProductId', xmlns=xmlns_shared_objects)
+    ProductId = etree.Element('ProductId', xmlns=PRODUCTDATA_COMMON_SHARED_OBJECT)
     ProductId.text = product_data.product_id
     root.append(ProductId)
 
-    ProductName = etree.Element('ProductName', xmlns=xmlns_shared_objects)
+    ProductName = etree.Element('ProductName', xmlns=PRODUCTDATA_COMMON_SHARED_OBJECT)
     ProductName.text = product_data.product_name
     root.append(ProductName)
 
-    Description = etree.Element('Description', xmlns=xmlns_shared_objects)
+    Description = etree.Element('Description', xmlns=PRODUCTDATA_COMMON_SHARED_OBJECT)
     product_data.description = json.loads(product_data.description)
     if product_data.description:
         for description in product_data.description:
-            description_element = etree.Element('description', xmlns=xmlns_shared_objects)
+            description_element = etree.Element('description', xmlns=PRODUCTDATA_COMMON_SHARED_OBJECT)
             description_element.text = description
             Description.append(description_element)
     root.append(Description)
 
 
 
-    priceExpiresDate = etree.Element('priceExpiresDate', xmlns=xmlns_shared_objects, xsi="true")
+    priceExpiresDate = etree.Element('priceExpiresDate', xmlns=PRODUCTDATA_COMMON_SHARED_OBJECT, xsi="true")
     priceExpiresDate.text = str(product_data.price_expires_date)
     root.append(priceExpiresDate)
     # price
@@ -75,7 +82,7 @@ def xml_response(product_data: schemas.ProductData):
 
     root.append(ProductKeywordArray)
 
-    productBrand = etree.Element('productBrand', xmlns=xmlns_shared_objects)
+    productBrand = etree.Element('productBrand', xmlns=PRODUCTDATA_COMMON_SHARED_OBJECT)
     productBrand.text = str(product_data.product_brand)
     root.append(productBrand)
     
@@ -109,7 +116,7 @@ def xml_response(product_data: schemas.ProductData):
     if product_data.related_product_array:
         for related_product in product_data.related_product_array:
             related_product_schema = schemas.RelatedProduct(**related_product)
-            RelatedProduct = etree.Element('RelatedProduct', xmlns=xmlns_shared_objects)
+            RelatedProduct = etree.Element('RelatedProduct', xmlns=PRODUCTDATA_COMMON_SHARED_OBJECT)
 
             relationType = etree.Element('relationType')
             relationType.text = related_product_schema.relation_type
@@ -137,7 +144,7 @@ def xml_response(product_data: schemas.ProductData):
     if product_data.product_price_group_array:
         for product_price_group in product_data.product_price_group_array:
             product_price_group_schema = schemas.ProductPriceGroup(**product_price_group)
-            ProductPriceGroup = etree.Element('ProductPriceGroup', xmlns=xmlns_shared_objects)
+            ProductPriceGroup = etree.Element('ProductPriceGroup', xmlns=PRODUCTDATA_COMMON_SHARED_OBJECT)
             
             for product_price in product_price_group_schema.product_price_array:
                 ProductPriceArray = etree.Element('ProductPriceArray')
@@ -178,7 +185,7 @@ def xml_response(product_data: schemas.ProductData):
 
             ProductPriceGroupArray.append(ProductPriceGroup)
         
-    complianceInfoAvailable = etree.Element('complianceInfoAvailable', xmlns=xmlns_shared_objects, xsi="true")
+    complianceInfoAvailable = etree.Element('complianceInfoAvailable', xmlns=PRODUCTDATA_COMMON_SHARED_OBJECT, xsi="true")
     complianceInfoAvailable.text = str(product_data.compliance_info_available)
     ProductPriceGroupArray.append(complianceInfoAvailable)
 
@@ -190,7 +197,7 @@ def xml_response(product_data: schemas.ProductData):
 
 
 
-    LocationDecorationArray = etree.Element('LocationDecorationArray', xmlns=xmlns_shared_objects)
+    LocationDecorationArray = etree.Element('LocationDecorationArray', xmlns=PRODUCTDATA_COMMON_SHARED_OBJECT)
     product_data.location_decoration_array = json.loads(product_data.location_decoration_array)
     if product_data.location_decoration_array:
         for location_decoration in product_data.location_decoration_array:
@@ -229,7 +236,7 @@ def xml_response(product_data: schemas.ProductData):
             product_part_schema = schemas.ProductPart(**product_part)
             ProductPart = etree.Element('ProductPart')
 
-            partId = etree.Element('partId', xmlns=xmlns_shared_objects)
+            partId = etree.Element('partId', xmlns=PRODUCTDATA_COMMON_SHARED_OBJECT)
             partId.text = product_part_schema.part_id
             ProductPart.append(partId)
 
@@ -240,7 +247,7 @@ def xml_response(product_data: schemas.ProductData):
             # primaryColor = etree.Element('primaryColor')
             # primaryColor.text = product_part_schema.primary_color
             
-            Color = etree.Element('Color', xmlns=xmlns_shared_objects)
+            Color = etree.Element('Color', xmlns=PRODUCTDATA_COMMON_SHARED_OBJECT)
             
             standardColorName = etree.Element('standardColorName')
             standardColorName.text = product_part_schema.primary_color.color_name
@@ -276,11 +283,11 @@ def xml_response(product_data: schemas.ProductData):
 
             ColorArray = etree.Element('ColorArray')
             for color in product_part_schema.color_array:
-                # Color = etree.Element('Color', xmlns=xmlns_shared_objects)
+                # Color = etree.Element('Color', xmlns=PRODUCTDATA_COMMON_SHARED_OBJECT)
                 # Color.text = color.
 
 
-                Color = etree.Element('Color', xmlns=xmlns_shared_objects)
+                Color = etree.Element('Color', xmlns=PRODUCTDATA_COMMON_SHARED_OBJECT)
                 
                 standardColorName = etree.Element('standardColorName')
                 standardColorName.text = product_part_schema.primary_color.color_name
@@ -302,7 +309,7 @@ def xml_response(product_data: schemas.ProductData):
 
             ProductPart.append(ColorArray)
 
-            primaryMaterial = etree.Element('primaryMaterial', xmlns=xmlns_shared_objects)
+            primaryMaterial = etree.Element('primaryMaterial', xmlns=PRODUCTDATA_COMMON_SHARED_OBJECT)
             primaryMaterial.text = product_part_schema.primary_material
             ProductPart.append(primaryMaterial)
 
@@ -310,11 +317,11 @@ def xml_response(product_data: schemas.ProductData):
 
             SpecificationArray = etree.Element('SpecificationArray')
             for specification in product_part_schema.specification_array:
-                # Color = etree.Element('Color', xmlns=xmlns_shared_objects)
+                # Color = etree.Element('Color', xmlns=PRODUCTDATA_COMMON_SHARED_OBJECT)
                 # Color.text = color.
 
 
-                Specification = etree.Element('Specification', xmlns=xmlns_shared_objects)
+                Specification = etree.Element('Specification', xmlns=PRODUCTDATA_COMMON_SHARED_OBJECT)
                 
                 specificationType = etree.Element('specificationType')
                 specificationType.text = specification.specification_type
@@ -333,11 +340,11 @@ def xml_response(product_data: schemas.ProductData):
 
             ProductPart.append(SpecificationArray)
 
-            shape = etree.Element('shape', xmlns=xmlns_shared_objects)
+            shape = etree.Element('shape', xmlns=PRODUCTDATA_COMMON_SHARED_OBJECT)
             shape.text = product_part_schema.shape
             ProductPart.append(shape)
 
-            ApparelSize = etree.Element('ApparelSize', xmlns=xmlns_shared_objects)
+            ApparelSize = etree.Element('ApparelSize', xmlns=PRODUCTDATA_COMMON_SHARED_OBJECT)
             # ApparelSize.text = product_part_schema.apparel_size
 
             apparelStyle = etree.Element('apparelStyle')
@@ -356,7 +363,7 @@ def xml_response(product_data: schemas.ProductData):
             ProductPart.append(ApparelSize)
 
 
-            Dimension = etree.Element('Dimension', xmlns=xmlns_shared_objects)
+            Dimension = etree.Element('Dimension', xmlns=PRODUCTDATA_COMMON_SHARED_OBJECT)
 
             dimensionUom = etree.Element('dimensionUom')
             dimensionUom.text = product_part_schema.dimension.dimension_uom
@@ -393,22 +400,22 @@ def xml_response(product_data: schemas.ProductData):
             lead_time.text = str(product_part_schema.lead_time)
             ProductPart.append(lead_time)
 
-            unspsc = etree.Element('unspsc', xmlns=xmlns_shared_objects)
+            unspsc = etree.Element('unspsc', xmlns=PRODUCTDATA_COMMON_SHARED_OBJECT)
             unspsc.text = str(product_part_schema.unspsc)
             ProductPart.append(unspsc)
 
-            gtin = etree.Element('gtin', xmlns=xmlns_shared_objects)
+            gtin = etree.Element('gtin', xmlns=PRODUCTDATA_COMMON_SHARED_OBJECT)
             gtin.text = str(product_part_schema.gtin)
             ProductPart.append(gtin)
 
-            isRushService = etree.Element('isRushService', xmlns=xmlns_shared_objects)
+            isRushService = etree.Element('isRushService', xmlns=PRODUCTDATA_COMMON_SHARED_OBJECT)
             isRushService.text = str(product_part_schema.is_rush_service).lower()
             ProductPart.append(isRushService)
 
 
             ProductPackagingArray = etree.Element('ProductPackagingArray')
             for product_package in product_part_schema.product_packaging_array:
-                ProductPackage = etree.Element('ProductPackage', xmlns=xmlns_shared_objects)
+                ProductPackage = etree.Element('ProductPackage', xmlns=PRODUCTDATA_COMMON_SHARED_OBJECT)
 
                 default = etree.Element('default')
                 default.text = str(product_package.default)
@@ -457,7 +464,7 @@ def xml_response(product_data: schemas.ProductData):
 
             ShippingPackageArray = etree.Element('ShippingPackageArray')
             for product_package in product_part_schema.shipping_packaging_array:
-                ShippingPackage = etree.Element('ShippingPackage', xmlns=xmlns_shared_objects)
+                ShippingPackage = etree.Element('ShippingPackage', xmlns=PRODUCTDATA_COMMON_SHARED_OBJECT)
 
                 # default = etree.Element('default')
                 # default.text = str(product_package.default)
@@ -516,43 +523,43 @@ def xml_response(product_data: schemas.ProductData):
     creationDate.text = str(product_data.creation_date)
     root.append(creationDate)
 
-    endDate = etree.Element('endDate', xmlns=xmlns_shared_objects)
+    endDate = etree.Element('endDate', xmlns=PRODUCTDATA_COMMON_SHARED_OBJECT)
     endDate.text = str(product_data.end_date)
     root.append(endDate)
 
-    effectiveDate = etree.Element('effectiveDate', xmlns=xmlns_shared_objects)
+    effectiveDate = etree.Element('effectiveDate', xmlns=PRODUCTDATA_COMMON_SHARED_OBJECT)
     effectiveDate.text = str(product_data.effective_date)
     root.append(effectiveDate)
 
-    isCaution = etree.Element('isCaution', xmlns=xmlns_shared_objects)
+    isCaution = etree.Element('isCaution', xmlns=PRODUCTDATA_COMMON_SHARED_OBJECT)
     isCaution.text = str(product_data.is_caution)
     root.append(isCaution)
 
-    cautionComment = etree.Element('cautionComment', xmlns=xmlns_shared_objects)
+    cautionComment = etree.Element('cautionComment', xmlns=PRODUCTDATA_COMMON_SHARED_OBJECT)
     cautionComment.text = product_data.caution_comment
     root.append(cautionComment)
 
-    isCloseout = etree.Element('isCloseout', xmlns=xmlns_shared_objects)
+    isCloseout = etree.Element('isCloseout', xmlns=PRODUCTDATA_COMMON_SHARED_OBJECT)
     isCloseout.text = str(product_data.is_closeout)
     root.append(isCloseout)
 
-    lineName = etree.Element('lineName', xmlns=xmlns_shared_objects)
+    lineName = etree.Element('lineName', xmlns=PRODUCTDATA_COMMON_SHARED_OBJECT)
     lineName.text = product_data.line_name
     root.append(lineName)
     
-    defaultSetupCharge = etree.Element('defaultSetupCharge', xmlns=xmlns_shared_objects)
+    defaultSetupCharge = etree.Element('defaultSetupCharge', xmlns=PRODUCTDATA_COMMON_SHARED_OBJECT)
     defaultSetupCharge.text = product_data.default_set_up_charge
     root.append(defaultSetupCharge)
 
-    defaultRunCharge = etree.Element('defaultRunCharge', xmlns=xmlns_shared_objects)
+    defaultRunCharge = etree.Element('defaultRunCharge', xmlns=PRODUCTDATA_COMMON_SHARED_OBJECT)
     defaultRunCharge.text = product_data.default_run_charge
     root.append(defaultRunCharge)
 
-    imprintSize = etree.Element('imprintSize', xmlns=xmlns_shared_objects)
+    imprintSize = etree.Element('imprintSize', xmlns=PRODUCTDATA_COMMON_SHARED_OBJECT)
     imprintSize.text = product_data.default_run_charge
     root.append(imprintSize)
 
-    FobPointArray = etree.Element('FobPointArray', xmlns=xmlns_shared_objects)
+    FobPointArray = etree.Element('FobPointArray', xmlns=PRODUCTDATA_COMMON_SHARED_OBJECT)
     product_data.fob_point_array = json.loads(product_data.fob_point_array)
 
 
@@ -586,36 +593,7 @@ def xml_response(product_data: schemas.ProductData):
 
     root.append(FobPointArray)
 
+    body.append(root)
 
-    # isCloseout = etree.Element('isCloseout', xmlns=xmlns_shared_objects)
-    # isCloseout.text = product_data.is_closeout
-    # root.append(isCloseout)
-
-
-
-
-
-
-
-
-
-
-
-
-
-    # xhtml = etree.Element("{http://www.w3.org/1999/xhtml}html")
-    # body = etree.SubElement(xhtml, "{http://www.w3.org/1999/xhtml}body")
-    # body.text = "Hello World"
-    # root.append(xhtml)
-
-
-
-
-
-    # ProductName.text = product_data.product_name
-    # root.append(ProductName)
-
-
-
-    xml = etree.tostring(root, pretty_print=True)
+    xml = etree.tostring(envelope, pretty_print=True)
     return xml

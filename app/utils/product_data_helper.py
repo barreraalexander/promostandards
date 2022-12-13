@@ -12,8 +12,7 @@ from pydantic import ValidationError
 
 class ProductDataOperations:
     @staticmethod
-    def getProductRequest(xml_dict):
-        request_dict = (xml_dict['GetProductRequest'])
+    def getProductRequest(request_dict):
 
         request_apparel_size_array = request_dict.get('ApparelSizeArray').get('ApparelSize')
         apparel_size_array = [schemas.ApparelSize(apparel_style=apparel['apparelStyle'], label_size=apparel['labelSize'], custom_size=apparel['customSize']) for apparel in request_apparel_size_array]
@@ -46,9 +45,7 @@ class ProductDataOperations:
 
     
     @staticmethod
-    def getProductDateModifiedRequest(xml_dict):
-        request_dict = (xml_dict['GetProductDateModifiedRequest'])
-
+    def getProductDateModifiedRequest(request_dict):
         try:                
             request_schema = schemas.ProductData_getProductDateModifiedRequest(**{
                 'ws_version': request_dict['wsVersion']['#text'],
@@ -63,24 +60,17 @@ class ProductDataOperations:
             raise CustomXMLError(999)
 
         db_session = get_session()
-        # product_datas = db_session.query(models.ProductData).filter(models.ProductData.is_closeout==True).all()
         product_datas = db_session.query(models.ProductData).all()
         if (not product_datas):
             raise CustomXMLError(custom_code=160)
             
-
-        xml = b''
-        for product_data in product_datas:
-            xml_part = getProductDateModified(product_data)
-            xml += xml_part
+        xml = getProductDateModified(product_datas)
 
         return xml
 
     
     @staticmethod
-    def getProductCloseOutRequest(xml_dict):
-        request_dict = (xml_dict['GetProductCloseOutRequest'])
-
+    def getProductCloseOutRequest(request_dict):
         try:                
             request_schema = schemas.ProductData_getProductCloseOutRequest(**{
                 'ws_version': request_dict['wsVersion']['#text'],
@@ -100,17 +90,12 @@ class ProductDataOperations:
             raise CustomXMLError(custom_code=160)
             
 
-        xml = b''
-        for product_data in product_datas:
-            xml_part = getProductCloseOut(product_data)
-            xml += xml_part
-            pass
+        xml = getProductCloseOut(product_datas)
 
         return xml
     
     @staticmethod
-    def getProductSellableRequest(xml_dict):
-        request_dict = (xml_dict['GetProductSellableRequest'])
+    def getProductSellableRequest(request_dict):
 
         try:                
             request_schema = schemas.ProductData_getProductSellableRequest(**{
@@ -133,11 +118,11 @@ class ProductDataOperations:
 
 
         db_session = get_session()
+        # right now, filter is set to check closeout
         product_datas = db_session.query(models.ProductData).filter(models.ProductData.is_closeout==True).all()
         if (not product_datas):
             raise CustomXMLError(custom_code=160)
         
-
         xml = getProductSellable(product_datas)
 
         return xml

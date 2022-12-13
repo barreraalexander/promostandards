@@ -11,8 +11,7 @@ from pydantic import ValidationError
 
 class PPCOperations:
     @staticmethod
-    def getAvailableLocations(xml_dict):
-        request_dict = (xml_dict['GetAvailableLocationsRequest'])
+    def getAvailableLocations(request_dict):
         try:
             request_schema = schemas.PPC_getAvailableLocationsRequest(**{
                 'ws_version': request_dict.get('wsVersion').get('#text'),
@@ -39,9 +38,9 @@ class PPCOperations:
 
 
     @staticmethod
-    def getDecorationColors(xml_dict):
+    def getDecorationColors(request_dict):
 
-        request_dict = (xml_dict['GetDecorationColorsRequest'])
+        # request_dict = (xml_dict['GetDecorationColorsRequest'])
         try:                
             request_schema = schemas.PPC_getDecorationColorsRequest(**{
                 'ws_version': request_dict.get('wsVersion').get('#text'),
@@ -76,8 +75,8 @@ class PPCOperations:
         return xml
 
     @staticmethod
-    def getFobPoints(xml_dict):
-        request_dict = (xml_dict['GetFobPointsRequest'])
+    def getFobPoints(request_dict):
+        # request_dict = (xml_dict['GetFobPointsRequest'])
         try:
             request_schema = schemas.PPC_getAvailableLocationsRequest(**{
                 'ws_version': request_dict.get('wsVersion').get('#text'),
@@ -91,6 +90,7 @@ class PPCOperations:
             loc = e.json()
             raise CustomXMLError(120, custom_description=loc)
         except Exception as e:
+            print (e)
             raise CustomXMLError(999)
 
         db_session = get_session()
@@ -100,12 +100,13 @@ class PPCOperations:
 
 
         xml = getFobPoints([fob_data])
+
         return xml
 
 
     @staticmethod
-    def getAvailableCharges(xml_dict):
-        request_dict = (xml_dict['GetAvailableChargesRequest'])
+    def getAvailableCharges(request_dict):
+        # request_dict = (xml_dict['GetAvailableChargesRequest'])
 
         try:
             request_schema = schemas.PPC_getAvailableLocationsRequest(**{
@@ -135,8 +136,7 @@ class PPCOperations:
         return xml
 
     @staticmethod
-    def getConfigurationAndPricing(xml_dict):
-        request_dict = (xml_dict['GetConfigurationAndPricingRequest'])
+    def getConfigurationAndPricing(request_dict):
         try:                
             request_schema = schemas.PPC_getConfigurationAndPricingRequest(**{
                 'ws_version': request_dict['wsVersion']['#text'],

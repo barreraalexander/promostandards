@@ -4,9 +4,7 @@ from typing import List
 import json
 
 
-from app.utils.helpers import MEDIACONTENT_COMMON_SHARED_OBJECT, \
-    MEDIACONTENT_COMMON_XMLNS, COMMON_XSI, ENVELOPE_S_XMLNS, \
-    BODY_XSD, BODY_XSI, ENVELOPE_NSMAP, BODY_NSMAP, ROOT_NSMAP
+from app.utils.helpers import MEDIACONTENT_COMMON_XMLNS, BODY_NSMAP, ROOT_NSMAP
 
 def xml_response(media_contents: List[schemas.MediaContent]):
 
@@ -18,11 +16,6 @@ def xml_response(media_contents: List[schemas.MediaContent]):
     body = etree.Element('{http://www.w3.org/2003/05/soap-envelope}Body', nsmap=BODY_NSMAP)
     envelope.append(body)
 
-    # for content in media_content:
-    #     pass
-
-
-    xml = b''
     for media_content in media_contents:
         root = etree.Element('MediaDateModified',
             xmlns=MEDIACONTENT_COMMON_XMLNS,

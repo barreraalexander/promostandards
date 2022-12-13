@@ -4,13 +4,23 @@ from typing import List
 import json
 from datetime import datetime
 
-def xml_response(product_data):
-    xsi = 'http://www.w3.org/2001/XMLSchema-instance'
-    xmlns = 'http://www.promostandards.org/WSDL/Inventory/2.0.0/'
+from app.utils.helpers import INVENTORY_COMMON_XMLNS, BODY_NSMAP, ROOT_NSMAP
 
-    root = etree.Element('GetInventoryLevelsResponse', xsi=xsi, xmlns=xmlns)
+def xml_response(product_data: schemas.ProductData):
+    envelope = etree.Element("{http://www.w3.org/2003/05/soap-envelope}Envelope")
+    etree.register_namespace("s", "http://www.w3.org/2003/05/soap-envelope")
+ 
 
-    Inventory = etree.Element('Inventory', xmlns=xmlns)
+    body = etree.Element('{http://www.w3.org/2003/05/soap-envelope}Body', nsmap=BODY_NSMAP)
+    envelope.append(body)
+
+    root = etree.Element('GetInventoryLevelsResponse',
+        xmlns=INVENTORY_COMMON_XMLNS,
+        nsmap=ROOT_NSMAP
+    )
+
+
+    Inventory = etree.Element('Inventory', xmlns=INVENTORY_COMMON_XMLNS)
 
 
     productId = etree.Element('productId')
@@ -24,7 +34,6 @@ def xml_response(product_data):
     product_data.product_part_array = json.loads(product_data.product_part_array)
 
     for part in product_data.product_part_array:
-        # part_schema = schemas.ProductPart(**part)
         part['main_part'] = False
         part['manufactured_item'] = False
         part['buy_to_order'] = False
@@ -181,7 +190,7 @@ def xml_response(product_data):
     Inventory.append(PartInventoryArray)
     root.append(Inventory)
 
-    ServiceMessageArray = etree.Element('ServiceMessageArray', xmlns=xmlns)
+    ServiceMessageArray = etree.Element('ServiceMessageArray', xmlns=INVENTORY_COMMON_XMLNS)
     service_messages = [schemas.ServiceMessage(**{
         'code' : i,
         'description' : f'description{i}',
@@ -209,5 +218,7 @@ def xml_response(product_data):
 
     root.append(ServiceMessageArray)
 
-    xml = etree.tostring(root, pretty_print=True)
+    body.append(root)
+
+    xml = etree.tostring(envelope, pretty_print=True)
     return xml

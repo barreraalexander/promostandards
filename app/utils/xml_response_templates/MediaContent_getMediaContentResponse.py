@@ -5,8 +5,7 @@ import json
 import xmltodict
 
 from app.utils.helpers import MEDIACONTENT_COMMON_SHARED_OBJECT, \
-    MEDIACONTENT_COMMON_XMLNS, \
-    BODY_NSMAP, ROOT_NSMAP
+    MEDIACONTENT_COMMON_XMLNS, BODY_NSMAP, ROOT_NSMAP
 
 def xml_response(media_content: schemas.MediaContent):
 

@@ -3,25 +3,44 @@ from app import schemas
 from typing import List
 import json
 
-def xml_response(product_data: schemas.ProductData):
-    xsi = 'http://www.w3.org/2001/XMLSchema-instance'
-    xmlns = 'http://www.promostandards.org/WSDL/ProductDataService/2.0.0/'
-
-    root = etree.Element('ProductCloseOut', xsi=xsi, xmlns=xmlns)
-
-    productId = etree.Element('productId', xsi=xsi, xmlns=xmlns)
-    productId.text = product_data.product_id
-    root.append(productId)
+from app.utils.helpers import PRODUCTDATA_COMMON_SHARED_OBJECT, PRODUCTDATA_COMMON_XMLNS, BODY_NSMAP, ROOT_NSMAP
 
 
-    product_data.product_part_array = json.loads(product_data.product_part_array)
 
-    for part in product_data.product_part_array:
-        part_schema = schemas.ProductPart(**part)
-        if part_schema.is_closeout:                
-            partId = etree.Element('partId', xsi=xsi, xmlns=xmlns)
-            partId.text = part_schema.part_id
-            root.append(partId)
+def xml_response(product_datas: List[schemas.ProductData]):
+    envelope = etree.Element("{http://www.w3.org/2003/05/soap-envelope}Envelope")
+    etree.register_namespace("s", "http://www.w3.org/2003/05/soap-envelope")
+ 
+
+    body = etree.Element('{http://www.w3.org/2003/05/soap-envelope}Body', nsmap=BODY_NSMAP)
+    envelope.append(body)
+
+    root = etree.Element('ProductCloseOut',
+        xmlns=PRODUCTDATA_COMMON_XMLNS,
+        nsmap=ROOT_NSMAP
+    )
+
+    # root = etree.Element('ProductCloseOut', xmlns=PRODUCTDATA_COMMON_XMLNS, nsmap=ROOT_NSMAP)
+
+
+    for product_data in product_datas:
+        productId = etree.Element('productId', xmlns=PRODUCTDATA_COMMON_XMLNS, nsmap=ROOT_NSMAP)
+        productId.text = product_data.product_id
+        root.append(productId)
         
-    xml = etree.tostring(root, pretty_print=True)
+        product_data.product_part_array = json.loads(product_data.product_part_array)
+        for part in product_data.product_part_array:
+            part_schema = schemas.ProductPart(**part)
+            if part_schema.is_closeout:                
+                partId = etree.Element('partId', xmlns=PRODUCTDATA_COMMON_XMLNS, nsmap=ROOT_NSMAP)
+                partId.text = part_schema.part_id
+                root.append(partId)
+            
+    
+    body.append(root)
+
+
+    xml = etree.tostring(envelope, pretty_print=True)
+
+
     return xml

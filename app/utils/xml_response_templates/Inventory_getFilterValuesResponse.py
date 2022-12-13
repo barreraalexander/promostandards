@@ -4,12 +4,20 @@ from typing import List
 import json
 from datetime import datetime
 
+from app.utils.helpers import INVENTORY_COMMON_XMLNS, BODY_NSMAP, ROOT_NSMAP
 
 def xml_response(product_data: schemas.ProductData):
-    xsi = 'http://www.w3.org/2001/XMLSchema-instance'
-    xmlns = 'http://www.promostandards.org/WSDL/Inventory/2.0.0/'
+    envelope = etree.Element("{http://www.w3.org/2003/05/soap-envelope}Envelope")
+    etree.register_namespace("s", "http://www.w3.org/2003/05/soap-envelope")
+ 
 
-    root = etree.Element('GetFilterValuesRequestResponse', xsi=xsi, xmlns=xmlns)
+    body = etree.Element('{http://www.w3.org/2003/05/soap-envelope}Body', nsmap=BODY_NSMAP)
+    envelope.append(body)
+
+    root = etree.Element('GetFilterValuesRequestResponse',
+        xmlns=INVENTORY_COMMON_XMLNS,
+        nsmap=ROOT_NSMAP
+    )
 
     product_data.product_part_array = json.loads(product_data.product_part_array)
     label_size_array = ['xl', 'm', 'l']
@@ -38,8 +46,6 @@ def xml_response(product_data: schemas.ProductData):
         LabelSizeArray.append(labelSize)
     Filter.append(LabelSizeArray)
 
-
-
     PartColorArray = etree.Element('PartColorArray')
     for part_color in filter.part_color_array:
         PartColor = etree.Element('partColor')
@@ -47,11 +53,9 @@ def xml_response(product_data: schemas.ProductData):
         PartColorArray.append(PartColor)
     Filter.append(PartColorArray)
 
-
-
     root.append(Filter)
 
-    ServiceMessageArray = etree.Element('ServiceMessageArray', xmlns=xmlns)
+    ServiceMessageArray = etree.Element('ServiceMessageArray', xmlns=INVENTORY_COMMON_XMLNS)
     service_messages = [schemas.ServiceMessage(**{
         'code' : i,
         'description' : f'description{i}',
@@ -79,7 +83,7 @@ def xml_response(product_data: schemas.ProductData):
 
     root.append(ServiceMessageArray)
 
+    body.append(root)
 
-
-    xml = etree.tostring(root, pretty_print=True)
+    xml = etree.tostring(envelope, pretty_print=True)
     return xml

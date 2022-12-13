@@ -5,18 +5,33 @@ import json
 from datetime import datetime
 
 
-from app.utils.helpers import COMMON_XSI, PPC_COMMON_XMLNS, PPC_COMMON_SHARED_OBJECT
+from app.utils.helpers import PPC_COMMON_XMLNS, PPC_COMMON_SHARED_OBJECT, BODY_NSMAP, ROOT_NSMAP
 
 def xml_response(configuration: schemas.Configuration):
     # root = etree.Element('Part')
     configuration.part_array = json.loads(configuration.part_array)
     configuration.fob_array = json.loads(configuration.fob_array)
     configuration.location_array = json.loads(configuration.location_array)
-    xml = b''
+    # xml = b''
+
+    envelope = etree.Element("{http://www.w3.org/2003/05/soap-envelope}Envelope")
+    etree.register_namespace("s", "http://www.w3.org/2003/05/soap-envelope")
+
+    body = etree.Element('{http://www.w3.org/2003/05/soap-envelope}Body', nsmap=BODY_NSMAP)
+    envelope.append(body)
+
+
+
     for part in configuration.part_array:
         part = schemas.PPC_Part(**part)
         
-        root = etree.Element('Part', xsi=COMMON_XSI, xmlns=PPC_COMMON_XMLNS)
+        # root = etree.Element('Part', xsi=COMMON_XSI, xmlns=PPC_COMMON_XMLNS)
+
+        root = etree.Element('Part',
+            xmlns=PPC_COMMON_XMLNS,
+            nsmap=ROOT_NSMAP
+        )
+
 
         partId = etree.Element('partId', xmlns=PPC_COMMON_XMLNS)
         partId.text = part.part_id
@@ -95,8 +110,8 @@ def xml_response(configuration: schemas.Configuration):
 
         root.append(LocationIdArray)
 
-        xml_part = etree.tostring(root, pretty_print=True)
-        xml += xml_part
+        body.append(root)        
 
+    xml = etree.tostring(envelope, pretty_print=True)
 
     return xml

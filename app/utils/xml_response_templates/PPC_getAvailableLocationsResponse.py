@@ -1,29 +1,39 @@
 from lxml import etree
 from app import schemas
 from typing import List
-import json
-from random import randrange, random
 
-from app.utils.helpers import COMMON_XSI, PPC_COMMON_SHARED_OBJECT, PPC_COMMON_XMLNS
-
+from app.utils.helpers import PPC_COMMON_XMLNS, PPC_COMMON_SHARED_OBJECT, BODY_NSMAP, ROOT_NSMAP
 
 def xml_response(locations_array: List[schemas.AvailableLocation]):
-    xml = b''
+    envelope = etree.Element("{http://www.w3.org/2003/05/soap-envelope}Envelope")
+    etree.register_namespace("s", "http://www.w3.org/2003/05/soap-envelope")
+ 
 
-    if locations_array:
-        for location in locations_array:
-            # location_schema = schemas.Location(**location)
-            root = etree.Element('AvailableLocation', xmlns=PPC_COMMON_XMLNS, xsi=COMMON_XSI)
+    body = etree.Element('{http://www.w3.org/2003/05/soap-envelope}Body', nsmap=BODY_NSMAP)
+    envelope.append(body)
 
-            locationId = etree.Element('locationId', xmlns=PPC_COMMON_SHARED_OBJECT)
-            locationId.text = str(location.location_id)                
-            root.append(locationId)
 
-            locationName = etree.Element('locationName', xmlns=PPC_COMMON_SHARED_OBJECT)
-            locationName.text = str(location.location_name)                
-            root.append(locationName)
-            xml_part = etree.tostring(root, pretty_print=True)
-            xml += xml_part
+    for location in locations_array:
+
+        root = etree.Element('AvailableLocation',
+            xmlns=PPC_COMMON_XMLNS,
+            nsmap=ROOT_NSMAP
+        )
+
+        locationId = etree.Element('locationId', xmlns=PPC_COMMON_SHARED_OBJECT)
+        locationId.text = str(location.location_id)                
+        root.append(locationId)
+
+        locationName = etree.Element('locationName', xmlns=PPC_COMMON_SHARED_OBJECT)
+        locationName.text = str(location.location_name)                
+        root.append(locationName)
+
+        body.append(root)
+
+
+        # xml += xml_part
+    xml = etree.tostring(envelope, pretty_print=True)
+
     return xml
 
 # def xml_response()

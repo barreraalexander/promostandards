@@ -3,16 +3,26 @@ from app import schemas
 from typing import List
 import json
 
-from app.utils.helpers import COMMON_XSI, PPC_COMMON_SHARED_OBJECT, PPC_COMMON_XMLNS
+from app.utils.helpers import PPC_COMMON_XMLNS, PPC_COMMON_SHARED_OBJECT, BODY_NSMAP, ROOT_NSMAP
 
 def xml_response(fob_points: List[schemas.PPC_FobPoint]):
 
-    xml = b''
+    envelope = etree.Element("{http://www.w3.org/2003/05/soap-envelope}Envelope")
+    etree.register_namespace("s", "http://www.w3.org/2003/05/soap-envelope")
+
+    body = etree.Element('{http://www.w3.org/2003/05/soap-envelope}Body', nsmap=BODY_NSMAP)
+    envelope.append(body)
+
     for fob_point in fob_points:
         fob_point.currency_supported_array = json.loads(fob_point.currency_supported_array)
         fob_point.product_array = json.loads(fob_point.product_array)
 
-        root = etree.Element('FobPoint', xsi=COMMON_XSI, xmlns=PPC_COMMON_XMLNS)
+        root = etree.Element('FobPoint',
+            xmlns=PPC_COMMON_XMLNS,
+            nsmap=ROOT_NSMAP
+        )
+
+
         fob_point_schema = fob_point
         
         fobId = etree.Element('fobId', xmlns=PPC_COMMON_SHARED_OBJECT)
@@ -62,7 +72,10 @@ def xml_response(fob_points: List[schemas.PPC_FobPoint]):
             ProductArray.append(Product)
         root.append(ProductArray)
 
-        xml_part = etree.tostring(root, pretty_print=True)
-        xml += xml_part
+        body.append(root)
+
+
+
+    xml = etree.tostring(envelope, pretty_print=True)
 
     return xml
