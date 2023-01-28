@@ -19,8 +19,10 @@ def create_app(config_class=settings):
 
     from app.blueprints.api.routes import router as api_router
     from app.blueprints.auth.routes import router as auth_router
+    from app.blueprints.wsdl.routes import router as wsdl_router
     app.register_blueprint(api_router)
     app.register_blueprint(auth_router)
+    app.register_blueprint(wsdl_router)
 
 
     if (settings.debug):

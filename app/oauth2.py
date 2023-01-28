@@ -42,7 +42,9 @@ def verify_access_token(token: str, credentials_exception):
 def auth_required(router):
     @wraps(router)
     def authorize_cookie(**kwargs):
+        print (dir(kwargs['request']))
         auth_token = kwargs['request'].cookies.get('Authorization')
+
         if (auth_token):
             token_type, jwt_token = auth_token.split(' ')
             verify_access_token(jwt_token, CustomXMLError(110), detail="Invalid Credentials")

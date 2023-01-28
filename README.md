@@ -1,3 +1,13 @@
+👉 HOW TO AUTOMATICALLY BUILD THE APP
+*all of these commands are to be run from the root directory, and without the `quotes`
+
+1. open the env.sample file and fill in the credentials as needed.
+2. run the command `docker-compose up --build`
+3. the app will automatically run on port 5085, e.g. http://localhost:5085/api/media_content (needs to be a POST request)
+
+
+
+<------------------------------------------------------>
 👉 HOW TO MANUALLY BUILD THE APP
 *all of these commands are to be run from the root directory, and without the `quotes`
 

@@ -9,6 +9,7 @@ from app.utils.ppc_helper import PPCOperations
 from app.config import settings
 
 from app.blueprints.errors.handlers import CustomXMLError
+from app.oauth2 import auth_required
 
 router = Blueprint('api', __name__, url_prefix='/api')
 
