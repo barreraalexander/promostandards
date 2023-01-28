@@ -79,7 +79,7 @@ def inventory():
 
     raise CustomXMLError(160)
                                                                                                                        
-
+                
 
 @router.route('/media_content', methods=['POST'])
 def media_content():
