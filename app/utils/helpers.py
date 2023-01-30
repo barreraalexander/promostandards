@@ -46,3 +46,21 @@ BODY_NSMAP = {
 ROOT_NSMAP = {
     'xsi':  COMMON_XSI,
 }
+
+
+product_data_GetProduct_xsd_location = ""
+product_data_GetProductCloseOut_xsd_location = ""
+product_data_GetProductDateModified_xsd_location = ""
+product_data_GetProductSellable_xsd_location = ""
+
+inventory_getFilter_xsd_location = ""
+inventory_getInventoryLevels_xsd_location = ""
+
+media_content_GetDateModified_xsd_location = ""
+media_content_GetMediaContent_xsd_location = ""
+
+ppc_GetAvailableCharges_xsd_location = ""
+ppc_GetAvailableLocations_xsd_location = ""
+ppc_GetConfigurationAndPricing_xsd_location = ""
+ppc_GetDecorationColor_xsd_location = ""
+ppc_GetFobPoints_xsd_location = ""
