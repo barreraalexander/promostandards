@@ -5,8 +5,7 @@ from app.config import settings
 from sqlalchemy.orm import Session
 from functools import wraps
 from app.blueprints.errors.handlers import CustomXMLError
-
-# oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
+from flask import request
 
 SECRET_KEY = settings.secret_key
 ALGORITHM = settings.algorithm
@@ -41,42 +40,16 @@ def verify_access_token(token: str, credentials_exception):
 
 def auth_required(router):
     @wraps(router)
-    def authorize_cookie(**kwargs):
-        print (dir(kwargs['request']))
-        auth_token = kwargs['request'].cookies.get('Authorization')
-
+    def authorize_header(**kwargs):
+        
+        auth_token = request.headers.get('Authorization')
+        
         if (auth_token):
             token_type, jwt_token = auth_token.split(' ')
-            verify_access_token(jwt_token, CustomXMLError(110), detail="Invalid Credentials")
+        
+            verify_access_token(jwt_token, CustomXMLError(110))
+        
             return router(**kwargs)
+        
         raise CustomXMLError(110)
-    return authorize_cookie
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(database.get_db)):
-#     credentials_exception = HTTPException(
-#             status_code=status.HTTP_401_UNAUTHORIZED,
-#             detail="Could not validate credentials",
-#             headers={"WWW-Authenticate" : "Bearer"}
-#         )
-
-#     token = verify_access_token(token, credentials_exception)
-
-#     user = db.query(models.User).filter(models.User.id == token.id).first()
-    
-
-#     return user
+    return authorize_header

@@ -13,7 +13,9 @@ from app.oauth2 import auth_required
 
 router = Blueprint('api', __name__, url_prefix='/api')
 
+
 @router.route('/product_data', methods=['POST'])
+@auth_required
 def products():
     request_xml =  request.data
 
@@ -52,6 +54,7 @@ def products():
 
 
 @router.route('/inventory', methods=['POST'])
+@auth_required
 def inventory():
     request_xml =  request.data
 
@@ -82,6 +85,7 @@ def inventory():
                 
 
 @router.route('/media_content', methods=['POST'])
+@auth_required
 def media_content():
     request_xml =  request.data
 
@@ -111,6 +115,7 @@ def media_content():
 
 
 @router.route('/ppc', methods=['POST'])
+@auth_required
 def ppc():
     request_xml =  request.data
 
