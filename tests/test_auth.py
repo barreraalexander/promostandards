@@ -6,7 +6,6 @@ from app.config import settings
 from secrets import token_hex
 
 def test_login_user(client, test_user):
-    # pass
     res = client.post("/auth/login", data={
         "username" : test_user['username'],
         "password" : test_user['password']

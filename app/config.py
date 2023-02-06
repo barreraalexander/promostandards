@@ -11,12 +11,11 @@ class Settings(BaseSettings):
     database_password: str = 'secretly_secret'
     database_name: str = 'promostandards'
 
-    # algorithm for creating json web tokens
     algorithm: str
 
     access_token_expire_minutes: int = 30
 
-    
+    use_json_auth: bool = False
 
 
     class Config:

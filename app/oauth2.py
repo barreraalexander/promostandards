@@ -6,6 +6,11 @@ from sqlalchemy.orm import Session
 from functools import wraps
 from app.blueprints.errors.handlers import CustomXMLError
 from flask import request
+from app.config import settings
+from os import getcwd
+import json
+import xmltodict
+
 
 SECRET_KEY = settings.secret_key
 ALGORITHM = settings.algorithm
@@ -42,11 +47,37 @@ def auth_required(router):
     @wraps(router)
     def authorize_header(**kwargs):
         
+        if (settings.use_json_auth):
+            with open('./app/users.json') as json_file:
+                data = json.load(json_file)
+                
+                request_xml = request.data
+                request_dict = xmltodict.parse(request_xml)
+                xml_body = request_dict.get('s:Envelope').get('s:Body')
+
+                for key in xml_body:
+                    if key[0] != '@':
+                        action_type = key
+                xml_body_content = xml_body[action_type]
+                user_id =  xml_body_content.get('id').get('#text')
+                password =  xml_body_content.get('password').get('#text')
+
+                if (user_id and password and data):
+                    for user in data.get('users'):
+
+                        input_id = user.get('id')
+                        input_password = user.get('password')
+
+                        if (user_id==str(input_id) and password==input_password):
+                            return router(**kwargs)
+            raise CustomXMLError(110)
+                        
+
         auth_token = request.headers.get('Authorization')
-        
+
         if (auth_token):
             token_type, jwt_token = auth_token.split(' ')
-        
+            
             verify_access_token(jwt_token, CustomXMLError(110))
         
             return router(**kwargs)

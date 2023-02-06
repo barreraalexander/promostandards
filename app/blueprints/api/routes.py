@@ -11,10 +11,12 @@ from app.config import settings
 from app.blueprints.errors.handlers import CustomXMLError
 from app.oauth2 import auth_required
 
+
 router = Blueprint('api', __name__, url_prefix='/api')
 
 
 @router.route('/product_data', methods=['POST'])
+
 @auth_required
 def products():
     request_xml =  request.data
@@ -48,7 +50,6 @@ def products():
         response = Response(response_xml, content_type='text/xml')
         return response
 
-    # check docs for what to do about total errors 
     raise CustomXMLError(160)
 
 

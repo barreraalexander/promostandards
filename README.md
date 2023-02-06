@@ -46,3 +46,14 @@
 
 2. after creating a user, get your access code on the route '/auth/login' by POSTing a form with 2 field: username and password.
 3. bearer token is to be returned. 
+
+
+<------------------------------------------------------>
+
+👉 HOW TO USE JSON AUTH
+
+1. In the .env.sample file you will notice an environment variable called use_json_auth. 
+
+2. Setting this to true will use json auth rather than jwt tokens.
+
+3. To use the routes, you will need to make sure that id and password are in the users.json. 

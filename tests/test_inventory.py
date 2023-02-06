@@ -4,28 +4,23 @@ from datetime import datetime
 
 def test_getInventoryLevels_error(client):
     res = client.post('/api/inventory')
-
     assert res.status_code == 999
 
-def test_getInventoryLevels_successful(client):
+def test_getInventoryLevels_successful(authorized_client):
     request_dict = {'s:Envelope': {'@xmlns:s': 'http://schemas.xmlsoap.org/soap/envelope/', 's:Body': {'@xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance', '@xmlns:xsd': 'http://www.w3.org/2001/XMLSchema', 'GetInventoryLevelsRequest': {'@xmlns': 'http://www.promostandards.org/WSDL/Inventory/2.0.0/', 'wsVersion': {'@xmlns': 'http://www.promostandards.org/WSDL/Inventory/2.0.0/SharedObjects/', '#text': '2.0.0'}, 'id': {'@xmlns': 'http://www.promostandards.org/WSDL/Inventory/2.0.0/SharedObjects/', '#text': 'id1'}, 'password': {'@xmlns': 'http://www.promostandards.org/WSDL/Inventory/2.0.0/SharedObjects/', '#text': 'password1'}, 'productId': {'@xmlns': 'http://www.promostandards.org/WSDL/Inventory/2.0.0/SharedObjects/', '#text': 'Token1'}, 'Filter': {'@xmlns': 'http://www.promostandards.org/WSDL/Inventory/2.0.0/SharedObjects/', 'partIdArray': {'partId': ['partId1', 'partId2']}, 'LabelSizeArray': {'labelSize': ['2XL', '2XS']}, 'PartColorArray': {'partColor': ['partColor1', 'partColor2']}}}}}}
-
     xml_body = xmltodict.unparse(request_dict)
-    res = client.post('/api/inventory', data=xml_body, content_type='text/xml')
-
+    res = authorized_client.post('/api/inventory', data=xml_body, content_type='text/xml', headers=authorized_client.headers)
     assert res.status_code == 200
-
-
 
 def test_getFilterValues_error(client):
     res = client.post('/api/inventory')    
     assert res.status_code == 999
 
-def test_getFilterValues_successful(client):
+def test_getFilterValues_successful(authorized_client):
     request_dict = {'s:Envelope': {'@xmlns:s': 'http://schemas.xmlsoap.org/soap/envelope/', 's:Body': {'@xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance', '@xmlns:xsd': 'http://www.w3.org/2001/XMLSchema', 'GetFilterValuesRequest': {'@xmlns': 'http://www.promostandards.org/WSDL/Inventory/2.0.0/', 'wsVersion': {'@xmlns': 'http://www.promostandards.org/WSDL/Inventory/2.0.0/SharedObjects/', '#text': '2.0.0'}, 'id': {'@xmlns': 'http://www.promostandards.org/WSDL/Inventory/2.0.0/SharedObjects/', '#text': 'id1'}, 'password': {'@xmlns': 'http://www.promostandards.org/WSDL/Inventory/2.0.0/SharedObjects/', '#text': 'password1'}, 'productId': {'@xmlns': 'http://www.promostandards.org/WSDL/Inventory/2.0.0/SharedObjects/', '#text': 'Token1'}}}}}
 
     xml_body = xmltodict.unparse(request_dict)
-    res = client.post('/api/inventory', data=xml_body, content_type='text/xml')
+    res = authorized_client.post('/api/inventory', data=xml_body, content_type='text/xml', headers=authorized_client.headers)
     
     assert res.status_code == 200
 
@@ -52,13 +47,13 @@ def test_getFilterValues_successful(client):
         999
     ),
 ])
-def test_getInventoryLevelsRequest_validator(client, ws_version, id, password, product_id, filter, status_code):
+def test_getInventoryLevelsRequest_validator(authorized_client, ws_version, id, password, product_id, filter, status_code):
 
     request_dict = {'s:Envelope': {'@xmlns:s': 'http://schemas.xmlsoap.org/soap/envelope/', 's:Body': {'@xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance', '@xmlns:xsd': 'http://www.w3.org/2001/XMLSchema', 'GetInventoryLevelsRequest': {'@xmlns': 'http://www.promostandards.org/WSDL/Inventory/2.0.0/', 'wsVersion': {'@xmlns': 'http://www.promostandards.org/WSDL/Inventory/2.0.0/SharedObjects/', '#text': ws_version}, 'id': {'@xmlns': 'http://www.promostandards.org/WSDL/Inventory/2.0.0/SharedObjects/', '#text': id}, 'password': {'@xmlns': 'http://www.promostandards.org/WSDL/Inventory/2.0.0/SharedObjects/', '#text': password}, 'productId': {'@xmlns': 'http://www.promostandards.org/WSDL/Inventory/2.0.0/SharedObjects/', '#text': product_id}, 'Filter': {'@xmlns': 'http://www.promostandards.org/WSDL/Inventory/2.0.0/SharedObjects/', 'partIdArray': {'partId': ['partId1', 'partId2']}, 'LabelSizeArray': {'labelSize': ['2XL', '2XS']}, 'PartColorArray': {'partColor': ['partColor1', 'partColor2']}}}}}}
 
     xml_body = xmltodict.unparse(request_dict)
     
-    res = client.post('/api/inventory', data=xml_body, content_type='text/xml')
+    res = authorized_client.post('/api/inventory', data=xml_body, content_type='text/xml', headers=authorized_client.headers)
 
 
     assert res.status_code == status_code
@@ -87,14 +82,14 @@ def test_getInventoryLevelsRequest_validator(client, ws_version, id, password, p
         999
     ),
 ])
-def test_getFilterValues_validator(client, ws_version, id, password, product_id, status_code):
+def test_getFilterValues_validator(authorized_client, ws_version, id, password, product_id, status_code):
 
     request_dict = {'s:Envelope': {'@xmlns:s': 'http://schemas.xmlsoap.org/soap/envelope/', 's:Body': {'@xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance', '@xmlns:xsd': 'http://www.w3.org/2001/XMLSchema', 'GetFilterValuesRequest': {'@xmlns': 'http://www.promostandards.org/WSDL/Inventory/2.0.0/', 'wsVersion': {'@xmlns': 'http://www.promostandards.org/WSDL/Inventory/2.0.0/SharedObjects/', '#text': ws_version}, 'id': {'@xmlns': 'http://www.promostandards.org/WSDL/Inventory/2.0.0/SharedObjects/', '#text': id}, 'password': {'@xmlns': 'http://www.promostandards.org/WSDL/Inventory/2.0.0/SharedObjects/', '#text': password}, 'productId': {'@xmlns': 'http://www.promostandards.org/WSDL/Inventory/2.0.0/SharedObjects/', '#text': product_id}}}}}
 
 
     xml_body = xmltodict.unparse(request_dict)
     
-    res = client.post('/api/inventory', data=xml_body, content_type='text/xml')
+    res = authorized_client.post('/api/inventory', data=xml_body, content_type='text/xml', headers=authorized_client.headers)
 
 
     assert res.status_code == status_code
